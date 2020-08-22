@@ -4,6 +4,8 @@ import hfo
 import numpy as np
 from scipy.spatial import distance
 from gym import spaces
+from src.lib.utils.action_selector import ActionSelector
+from src.lib.utils.reward_selector import RewardSelector
 
 
 class ObservationSpace():
@@ -44,7 +46,8 @@ class HFOEnv(hfo.HFOEnvironment):
 
     def __init__(self, actions, rewards,
                  is_offensive=False, play_goalie=False,
-                 strict=False, port=6000, continuous=False, team='base'):
+                 strict=False, port=6000, continuous=False, team='base',
+                 selected_action=0, selected_reward=0):
         super(HFOEnv, self).__init__()
         self.connectToServer(hfo.HIGH_LEVEL_FEATURE_SET, './formations-dt',
                              port, 'localhost',
@@ -56,6 +59,11 @@ class HFOEnv(hfo.HFOEnvironment):
         self.choosed_ops = min(1, self.num_opponents)
         self.play_goalie = play_goalie
         self.continuous = continuous
+
+        self.action_selector = ActionSelector(selected_action, actions)
+        self.reward_selector = RewardSelector(selected_reward)
+
+        # TODO: check the usability of this code
         if not strict:
             self.observation_space = ObservationSpace(self, rewards)
         else:
@@ -76,19 +84,32 @@ class HFOEnv(hfo.HFOEnvironment):
         #     self.act(self.action_space.actions[action[0]], action[1])
         #     action = self.action_space.actions[action[0]]
         # else:
-        if not self.continuous:
-            action = self.action_space.actions[action]
-        else:
-            action = action[0]
-            if action < -0.5:
-                action = self.action_space.actions[0]
-            elif action < 0:
-                action = self.action_space.actions[1]
-            elif action <= 0.5:
-                action = self.action_space.actions[2]
-            else:
-                action = self.action_space.actions[3]
-        self.act(hfo.DRIBBLE_TO, 0.0, 0.0)
+        # if not self.continuous:
+        #     action = self.action_space.actions[action]
+        # else:
+        #     action = action[0]
+        #     if action < -0.5:
+        #         action = self.action_space.actions[0]
+        #     elif action < 0:
+        #         action = self.action_space.actions[1]
+        #     elif action <= 0.5:
+        #         action = self.action_space.actions[2]
+        #     else:
+        #         action = self.action_space.actions[3]
+
+        (result_action, params_action) = self.action_selector.get_action(action)
+        action = result_action[0]
+        if params_action == 1:
+            self.act(result_action[0])
+        elif params_action == 2:
+            self.act(result_action[0], result_action[1])
+        elif params_action == 3:
+            self.act(result_action[0], result_action[1], result_action[2])
+        elif params_action == 4:
+            self.act(result_action[0],
+                     result_action[1],
+                     result_action[2],
+                     result_action[3])
         act = self.action_space.actions.index(action)
         status = super(HFOEnv, self).step()
         done = True
