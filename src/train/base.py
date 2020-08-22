@@ -25,8 +25,6 @@ for episode in itertools.count():
     while status == hfo.IN_GAME:
         next_state, reward, done, status = hfo_env.step([-0.6])
 
-        if status == SERVER_DOWN:
-            exit()
         if done:
             break
 

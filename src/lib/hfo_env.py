@@ -88,7 +88,7 @@ class HFOEnv(hfo.HFOEnvironment):
                 action = self.action_space.actions[2]
             else:
                 action = self.action_space.actions[3]
-        self.act(action)
+        self.act(hfo.DRIBBLE_TO, 0.0, 0.0)
         act = self.action_space.actions.index(action)
         status = super(HFOEnv, self).step()
         done = True
