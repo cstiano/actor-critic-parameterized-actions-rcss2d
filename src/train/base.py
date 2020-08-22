@@ -9,11 +9,13 @@ import numpy as np
 from src.lib.hfo_env import HFOEnv
 
 
-team = 'helios'
+team = 'HELIOS'
 port = 6000
 ENV_ACTIONS = [hfo.DRIBBLE_TO]
 ENV_REWARDS = [0]
 hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True, continuous=True, team=team, port=port)
+
+print("Started")
 
 for episode in itertools.count():
     status = hfo.IN_GAME
