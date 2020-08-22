@@ -3,10 +3,10 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 echo $DIR
 export PYTHONPATH=$PYTHONPATH:$DIR/..
-HFO_mgm/bin/HFO --fullstate --no-logging --headless --offense-agents=1 --defense-npcs=1 --offense-team=$1 --defense-team=$2 --trials $3 &
+HFO/bin/HFO --fullstate --no-logging --headless --offense-agents=1 --defense-npcs=1 --offense-team=$1 --defense-team=$2 --trials $3 &
 sleep 5
 # Sleep is needed to make sure doesn't get connected too soon, as unum 1 (goalie)
-python ./agents/test_ddpg_offensive.py &
+python ./src/train/base.py &
 echo "conectar"
 sleep 4
 
