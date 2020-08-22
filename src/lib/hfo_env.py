@@ -45,7 +45,7 @@ class HFOEnv(hfo.HFOEnvironment):
     prev_ball_potential = None
 
     def __init__(self, actions, rewards,
-                 is_offensive=False, play_goalie=False,
+                 is_offensive=True, play_goalie=False,
                  strict=False, port=6000, continuous=False, team='base',
                  selected_action=0, selected_reward=0):
         super(HFOEnv, self).__init__()
@@ -78,24 +78,8 @@ class HFOEnv(hfo.HFOEnvironment):
         else:
             self.action_space = ActionSpace(actions)
 
-    def step(self, action, is_offensive=False):
-        # Prepared when get discrete space with pass
-        # if isinstance(action, tuple):
-        #     self.act(self.action_space.actions[action[0]], action[1])
-        #     action = self.action_space.actions[action[0]]
-        # else:
-        # if not self.continuous:
-        #     action = self.action_space.actions[action]
-        # else:
-        #     action = action[0]
-        #     if action < -0.5:
-        #         action = self.action_space.actions[0]
-        #     elif action < 0:
-        #         action = self.action_space.actions[1]
-        #     elif action <= 0.5:
-        #         action = self.action_space.actions[2]
-        #     else:
-        #         action = self.action_space.actions[3]
+    def step(self, action, is_offensive=True):
+        # Action is the foward from the neural network (array of actions).
 
         (result_action, params_action) = self.action_selector.get_action(action)
         action = result_action[0]
@@ -116,19 +100,23 @@ class HFOEnv(hfo.HFOEnvironment):
         if status == hfo.IN_GAME:
             done = False
         next_state = self.get_state()
-        # -----------------------------
-        reward = 0
-        if is_offensive:
-            reward = self.get_reward_off(act, next_state, done, status)
-        elif self.play_goalie:
-            reward = self.get_reward_goalie(act, next_state, done, status)
-        else:
-            reward = self.get_reward_def(act, next_state, done, status)
+
+        # Getting Reward
+        self.update_observation_space(done, status)
+        reward = self.reward_selector.get_reward(act, next_state, done, status)
+
         return next_state, reward, done, status
 
     def get_state(self):
         state = self.strict_state(self.getState())
         return state
+
+    def update_observation_space(self, done, status):
+        if done:
+            if status == hfo.GOAL:
+                self.observation_space.goals_taken += 1
+            else:
+                self.observation_space.taken += 1
 
     # Reward for the offensive - include the implementation here
     def get_reward_off(self, act, next_state, done, status):
@@ -215,7 +203,7 @@ class HFOEnv(hfo.HFOEnvironment):
                                 -self.pitchHalfWidth - self.tolerance_y,
                                 self.pitchHalfWidth + self.tolerance_y)
 
-    def remake_state(self, state, is_offensive=False):
+    def remake_state(self, state, is_offensive=True):
         num_mates, num_ops = self.num_teammates, self.num_opponents
         state[0] = self.abs_x(state[0], is_offensive)
         state[1] = self.abs_y(state[1])
