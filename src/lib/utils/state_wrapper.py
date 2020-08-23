@@ -1,3 +1,6 @@
+from scipy.spatial import distance
+
+
 class StateWrapper:
     def __init__(self, state=None):
         super().__init__()
@@ -26,15 +29,16 @@ class StateWrapper:
     
     def get_proximity_to_opponent(self):
         return self.state[9]
-    
-    # TODO
+
     def get_distance_to_ball(self):
-        return float(0.0)
+        agent = self.get_position()
+        ball = self.get_ball_position()
+        return distance.euclidean(agent, ball)
     
     # TODO
     def get_distance_to_goal(self):
-        return float(0.0)
+        return 0.0
     
     # TODO
     def get_ball_distance_to_goal(self):
-        return float(0.0)
+        return 0.0

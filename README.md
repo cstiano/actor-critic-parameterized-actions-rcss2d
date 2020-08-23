@@ -17,3 +17,9 @@ T Pass Opening Angle
 3T X, Y, and Uniform Number of Teammates
 3O X, Y, and Uniform Number of Opponents
 +1 Last Action Success Possible
+
+## Field dimension
+
+X - 105.0 (2 * 52.5)
+Y - 68.0 (2 * 34)
+Diagonal = 125.1
