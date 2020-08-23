@@ -1,1 +1,19 @@
 # tg-repo
+
+## State Space
+0 X position
+1 Y position
+2 Orientation
+3 Ball X
+4 Ball Y
+5 Able to Kick
+6 Goal Center Proximity
+7 Goal Center Angle
+8 Goal Opening Angle
+9 Proximity to Opponent
+T Teammate’s Goal Opening Angle
+T Proximity from Teammate i to Opponent
+T Pass Opening Angle
+3T X, Y, and Uniform Number of Teammates
+3O X, Y, and Uniform Number of Opponents
++1 Last Action Success Possible
