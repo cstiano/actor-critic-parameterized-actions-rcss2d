@@ -61,5 +61,7 @@ for episode in itertools.count():
         step += 1
         if done:
             break
+    if (episode % 10) == 0:
+        ddpg.save_model(actor_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_actor", critic_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_critic")
     writer.add_scalar(f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
 writer.close()

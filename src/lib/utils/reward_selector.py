@@ -5,7 +5,7 @@ GO_TO_BALL_REWARD = 1
 
 MAX_DISTANCE = 130.0
 MIN_DISTANCE_TO_BALL = 2.0
-
+THRESHOLD_DISTANCE = 10.0
 
 class RewardSelector:
     def __init__(self, selected_reward=0):
@@ -24,4 +24,6 @@ class RewardSelector:
         distance_to_ball = state_wrapper.get_distance_to_ball()
         if distance_to_ball <= MIN_DISTANCE_TO_BALL:
             return 100000.0
+        elif distance_to_ball >= THRESHOLD_DISTANCE:
+            return float(-100.0 * distance_to_ball)
         return float(MAX_DISTANCE / (float(distance_to_ball) * 0.1))
