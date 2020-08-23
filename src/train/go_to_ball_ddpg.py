@@ -32,7 +32,8 @@ frame_idx = 0
 rewards = []
 unum = hfo_env.getUnum()
 
-writer = SummaryWriter('logs/{}_DDPG_'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
+writer = SummaryWriter(
+    'logs/{}_DDPG'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
 params = Params(hfo_env.action_space)
 ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
@@ -61,7 +62,9 @@ for episode in itertools.count():
         step += 1
         if done:
             break
-    if (episode % 10) == 0:
-        ddpg.save_model(actor_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_actor", critic_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_critic")
-    writer.add_scalar(f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
+    if (episode % 200) == 0:
+        ddpg.save_model(actor_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_actor",
+                        critic_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_critic")
+    writer.add_scalar(
+        f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
 writer.close()
