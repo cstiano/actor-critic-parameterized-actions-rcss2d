@@ -14,7 +14,7 @@ from src.lib.utils.action_selector import *
 from src.lib.utils.reward_selector import *
 from src.lib.utils.action_selector import GO_TO_BALL_ACTION
 from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
-from src.lib.utils.ou_noise import OUNoise
+from src.lib.utils.ounoise import OUNoise
 from src.lib.utils.hyperparameters import Params
 from src.actor_critic_arch.baseline_rlad_ddpg import DDPG
 
