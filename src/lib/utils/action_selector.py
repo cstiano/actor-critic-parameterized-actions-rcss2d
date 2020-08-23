@@ -22,4 +22,5 @@ class ActionSelector:
         return ([], 0)
 
     def get_go_to_ball_action(self, action):
-        return ([hfo.DASH, MAX_DASH, action[0]], 3)
+        angle = float(action[0] * 180.0)
+        return ([hfo.DASH, MAX_DASH, angle], 3)
