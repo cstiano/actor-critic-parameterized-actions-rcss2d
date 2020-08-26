@@ -18,53 +18,57 @@ from src.lib.utils.ounoise import OUNoise
 from src.lib.utils.hyperparameters import Params
 from src.actor_critic_arch.baseline_rlad_ddpg import DDPG
 
-team = 'HELIOS'
-port = 6000
+TEAM = 'HELIOS'
+PORT = 6000
 ENV_ACTIONS = [hfo.DASH]
 ENV_REWARDS = [0]
-hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
-                 continuous=True, team=team, port=port,
-                 selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD)
+ACTOR_MODEL_NAME = "ddpg_actor_go_to_ball"
+CRITIC_MODEL_NAME = "ddpg_critic_go_to_ball"
 
-max_frames = 12000
-max_steps = 100000
-frame_idx = 0
-rewards = []
+
+hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
+                 continuous=True, team=TEAM, port=PORT,
+                 selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD)
 unum = hfo_env.getUnum()
 
 writer = SummaryWriter(
-    'logs/{}_DDPG'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
+    'logs/{}_DDPG_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
 params = Params(hfo_env.action_space)
+
 ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
 ou_noise = OUNoise(hfo_env.action_space)
 
-for episode in itertools.count():
-    status = hfo.IN_GAME
-    done = True
-    state = hfo_env.get_state()
-    episode_reward = 0
-    step = 0
+try:
+    for episode in itertools.count():
+        status = hfo.IN_GAME
+        done = True
+        state = hfo_env.get_state()
+        episode_reward = 0
+        step = 0
 
-    while status == hfo.IN_GAME:
-        action = ddpg.policy_network.get_action(state)
-        action = ou_noise.get_action(action, step)
-        next_state, reward, done, status = hfo_env.step(action)
+        while status == hfo.IN_GAME:
+            action = ddpg.policy_network.get_action(state)
+            action = ou_noise.get_action(action, step)
+            next_state, reward, done, status = hfo_env.step(action)
 
-        ddpg.replay_buffer.push(state, action, reward, next_state, done)
+            ddpg.replay_buffer.push(state, action, reward, next_state, done)
 
-        if len(ddpg.replay_buffer) > params.batch_size:
-            ddpg.ddpg_update()
+            if len(ddpg.replay_buffer) > params.batch_size:
+                ddpg.ddpg_update()
 
-        state = next_state
-        episode_reward += reward
-        frame_idx += 1
-        step += 1
-        if done:
-            break
-    if (episode % 200) == 0:
-        ddpg.save_model(actor_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_actor",
-                        critic_path="/home/robocin-server2/cristiano/tg-repo/models/ddpg_critic")
-    writer.add_scalar(
-        f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
-writer.close()
+            state = next_state
+            episode_reward += reward
+            step += 1
+
+            if done:
+                break
+
+        if (episode % params.saving_cycle) == 0:
+            ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
+        writer.add_scalar(
+            f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
+    writer.close()
+except KeyboardInterrupt:
+    ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
+    writer.close()

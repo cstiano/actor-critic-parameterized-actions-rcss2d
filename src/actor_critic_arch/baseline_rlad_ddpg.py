@@ -99,22 +99,29 @@ class DDPG(object):
             )
     
     # Save model parameters
-    def save_model(self, actor_path=None, critic_path=None):
+    def save_model(self, actor_model_name=None, critic_model_name=None):
         if not os.path.exists('models/'):
             os.makedirs('models/')
+        abs_path = os.path.abspath(os.getcwd()) + "/"
+        
+        actor_path = abs_path + "models/ddpg_actor"
+        if actor_model_name is not None:
+            actor_path = abs_path + "models/" + actor_model_name
 
-        if actor_path is None:
-            actor_path = "models/ddpg_actor"
-        if critic_path is None:
-            critic_path = "models/ddpg_critic"
+        critic_path = abs_path + "models/ddpg_critic"
+        if critic_model_name is not None:
+            critic_path = abs_path + "models/" + critic_model_name
         print('Saving models to {} and {}'.format(actor_path, critic_path))
         torch.save(self.policy_network.state_dict(), actor_path)
         torch.save(self.value_network.state_dict(), critic_path)
 
     # Load model parameters
     def load_model(self, actor_path, critic_path):
+        abs_path = os.path.abspath(os.getcwd()) + "/"
         print('Loading models from {} and {}'.format(actor_path, critic_path))
         if actor_path is not None:
+            actor_path = abs_path + "models/" + actor_path
             self.policy_network.load_state_dict(torch.load(actor_path))
         if critic_path is not None:
+            critic_path = abs_path + "models/" + critic_path
             self.value_network.load_state_dict(torch.load(critic_path))

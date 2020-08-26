@@ -8,3 +8,4 @@ class Params:
     self.soft_tau = 1e-2
     self.batch_size = 128
     self.action_space = action_space
+    self.saving_cycle = 200
