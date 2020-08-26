@@ -6,6 +6,7 @@ from scipy.spatial import distance
 from gym import spaces
 from src.lib.utils.action_selector import ActionSelector
 from src.lib.utils.reward_selector import RewardSelector
+from src.lib.utils.state_selector import StateSelector
 
 
 class ObservationSpace():
@@ -47,7 +48,7 @@ class HFOEnv(hfo.HFOEnvironment):
     def __init__(self, actions, rewards,
                  is_offensive=True, play_goalie=False,
                  strict=False, port=6000, continuous=False, team='base',
-                 selected_action=0, selected_reward=0):
+                 selected_action=0, selected_reward=0, selected_state=0):
         super(HFOEnv, self).__init__()
         self.connectToServer(hfo.HIGH_LEVEL_FEATURE_SET, './formations-dt',
                              port, 'localhost',
@@ -62,13 +63,17 @@ class HFOEnv(hfo.HFOEnvironment):
 
         self.action_selector = ActionSelector(selected_action, actions)
         self.reward_selector = RewardSelector(selected_reward)
+        self.state_selector = StateSelector(selected_state)
+        self.selected_state = selected_state
 
         # TODO: check the usability of this code
         if not strict:
             self.observation_space = ObservationSpace(self, rewards)
         else:
-            shape = 11 + 3 * self.choosed_mates + 2 * self.choosed_ops
-            shape = (shape,)
+            shape = self.state_selector.get_shape()
+            if self.selected_state == 0:
+                shape = 11 + 3 * self.choosed_mates + 2 * self.choosed_ops
+                shape = (shape,)
             self.observation_space = ObservationSpace(self,
                                                       rewards,
                                                       shape=shape)
@@ -109,6 +114,8 @@ class HFOEnv(hfo.HFOEnvironment):
 
     def get_state(self):
         state = self.strict_state(self.getState())
+        if self.selected_state != 0:
+            state = self.state_selector.get_state(state)
         return state
 
     def update_observation_space(self, done, status):
