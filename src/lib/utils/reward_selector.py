@@ -3,7 +3,7 @@ from src.lib.utils.state_wrapper import StateWrapper
 TEST_REWARD = 0
 GO_TO_BALL_REWARD = 1
 
-MAX_DISTANCE = 130.0
+MAX_DISTANCE = 150.0
 MIN_DISTANCE_TO_BALL = 2.0
 THRESHOLD_DISTANCE = 10.0
 
@@ -22,8 +22,4 @@ class RewardSelector:
 
     def get_reward_go_to_ball(self, act, state_wrapper, done, status):
         distance_to_ball = state_wrapper.get_distance_to_ball()
-        if distance_to_ball <= MIN_DISTANCE_TO_BALL:
-            return 100000.0
-        elif distance_to_ball >= THRESHOLD_DISTANCE:
-            return float(-100.0 * distance_to_ball)
-        return float(MAX_DISTANCE / (float(distance_to_ball) * 0.1))
+        return (MAX_DISTANCE - distance_to_ball) / MAX_DISTANCE
