@@ -14,6 +14,7 @@ from src.lib.utils.action_selector import *
 from src.lib.utils.reward_selector import *
 from src.lib.utils.action_selector import GO_TO_BALL_ACTION
 from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
+from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_sac import SAC
 
@@ -28,7 +29,8 @@ SOFT_MODEL_NAME = "sac_soft_go_to_ball"
 
 hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
-                 selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD)
+                 selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD,
+                 selected_state=BALL_AXIS_POSITION_SPACE)
 unum = hfo_env.getUnum()
 
 writer = SummaryWriter(
