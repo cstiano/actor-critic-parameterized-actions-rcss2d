@@ -25,7 +25,7 @@ class StateSelector:
     # This state delivers the positon of the agent relative to the ball
     # considering the ball as the (0,0) of the axis
     def get_ball_axis_position_state(self, state):
-        state_wrapper = StateWrapper(self.strict_state(state))
+        state_wrapper = StateWrapper(state)
         agent_position = state_wrapper.get_position()
         ball_position = state_wrapper.get_ball_position()
 
