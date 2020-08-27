@@ -105,10 +105,11 @@ class HFOEnv(hfo.HFOEnvironment):
         if status == hfo.IN_GAME:
             done = False
         next_state = self.get_state()
+        next_strict_state = self.strict_state(self.getState())
 
         # Getting Reward
         self.update_observation_space(done, status)
-        reward = self.reward_selector.get_reward(act, next_state, done, status)
+        reward = self.reward_selector.get_reward(act, next_strict_state, done, status)
 
         return next_state, reward, done, status
 

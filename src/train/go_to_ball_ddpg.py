@@ -54,7 +54,7 @@ try:
 
             ddpg.replay_buffer.push(state, action, reward, next_state, done)
 
-            if len(ddpg.replay_buffer) > params.batch_size:
+            if len(ddpg.replay_buffer) > params['batch_size']:
                 ddpg.ddpg_update()
 
             state = next_state
