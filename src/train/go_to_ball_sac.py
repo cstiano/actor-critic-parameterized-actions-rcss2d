@@ -51,7 +51,7 @@ try:
 
             sac.replay_buffer.push(state, action, reward, next_state, done)
 
-            if len(sac.replay_buffer) > params.batch_size:
+            if len(sac.replay_buffer) > params['batch_size']:
                 sac.soft_q_update()
 
             state = next_state
@@ -61,7 +61,7 @@ try:
             if done:
                 break
 
-        if (episode % params.saving_cycle) == 0:
+        if (episode % params['saving_cycle']) == 0:
             sac.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME, SOFT_MODEL_NAME)
         writer.add_scalar(
             f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)

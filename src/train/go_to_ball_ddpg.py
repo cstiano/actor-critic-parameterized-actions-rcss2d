@@ -64,7 +64,7 @@ try:
             if done:
                 break
 
-        if (episode % params.saving_cycle) == 0:
+        if (episode % params['saving_cycle']) == 0:
             ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
         writer.add_scalar(
             f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
