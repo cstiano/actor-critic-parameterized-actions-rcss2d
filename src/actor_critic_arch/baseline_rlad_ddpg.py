@@ -20,12 +20,12 @@ class DDPG(object):
 
         self.state_dim = state_dim
         self.action_dim = action_dim
-        self.hidden_dim = params.hidden_dim
-        self.gamma = params.gamma
-        self.value_lr = params.value_lr
-        self.policy_lr = params.policy_lr
-        self.soft_tau = params.soft_tau
-        self.batch_size = params.batch_size
+        self.hidden_dim = params['hidden_dim']
+        self.gamma = params['gamma']
+        self.value_lr = params['value_lr']
+        self.policy_lr = params['policy_lr']
+        self.soft_tau = params['soft_tau']
+        self.batch_size = params['batch_size']
         self.min_value = -np.inf
         self.max_value = np.inf
 
@@ -52,7 +52,7 @@ class DDPG(object):
 
         self.value_criterion = nn.MSELoss()
 
-        self.replay_buffer_size = params.replay_buffer_size
+        self.replay_buffer_size = params['replay_buffer_size']
         self.replay_buffer = ReplayBuffer(self.replay_buffer_size)
 
     def ddpg_update(self):

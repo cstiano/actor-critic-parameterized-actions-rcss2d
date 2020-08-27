@@ -17,13 +17,13 @@ from src.lib.utils.replay_buffer import *
 
 class SAC(object):
     def __init__(self, state_dim, action_dim, params):
-        self.hidden_dim = params.hidden_dim
-        self.batch_size = params.batch_size
-        self.gamma = params.gamma
-        self.mean_lambda = params.mean_lambda
-        self.std_lambda = params.std_lambda
-        self.z_lambda = params.z_lambda
-        self.soft_tau = params.soft_tau
+        self.hidden_dim = params['hidden_dim']
+        self.batch_size = params['batch_size']
+        self.gamma = params['gamma']
+        self.mean_lambda = params['mean_lambda']
+        self.std_lambda = params['std_lambda']
+        self.z_lambda = params['z_lambda']
+        self.soft_tau = params['soft_tau']
 
         self.value_network = ValueNetwork(
             state_dim, self.hidden_dim).to(device)
@@ -41,9 +41,9 @@ class SAC(object):
         self.value_criterion = nn.MSELoss()
         self.soft_q_criterion = nn.MSELoss()
 
-        self.value_lr = params.value_lr
-        self.soft_q_lr = params.soft_q_lr
-        self.policy_lr = params.policy_lr
+        self.value_lr = params['value_lr']
+        self.soft_q_lr = params['soft_q_lr']
+        self.policy_lr = params['policy_lr']
 
         self.value_optimizer = optim.Adam(
             self.value_network.parameters(), lr=self.value_lr)
@@ -52,7 +52,7 @@ class SAC(object):
         self.policy_optimizer = optim.Adam(
             self.policy_network.parameters(), lr=self.policy_lr)
 
-        self.replay_buffer_size = params.replay_buffer_size
+        self.replay_buffer_size = params['replay_buffer_size']
         self.replay_buffer = ReplayBuffer(self.replay_buffer_size)
 
     def soft_q_update(self):

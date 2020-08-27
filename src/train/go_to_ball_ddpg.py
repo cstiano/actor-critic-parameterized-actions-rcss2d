@@ -15,7 +15,7 @@ from src.lib.utils.reward_selector import *
 from src.lib.utils.action_selector import GO_TO_BALL_ACTION
 from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
 from src.lib.utils.ounoise import OUNoise
-from src.lib.utils.hyperparameters import Params
+from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_ddpg import DDPG
 
 TEAM = 'HELIOS'
@@ -33,7 +33,7 @@ unum = hfo_env.getUnum()
 
 writer = SummaryWriter(
     'logs/{}_DDPG_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
-params = Params(hfo_env.action_space)
+params = PARAMS['ddpg']
 
 ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
