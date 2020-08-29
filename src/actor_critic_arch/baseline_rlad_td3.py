@@ -60,7 +60,7 @@ class TD3(object):
         self.replay_buffer = ReplayBuffer(params['replay_buffer_size'])
 
     def td3_update(self, step):
-        state, action, reward, next_state, done = replay_buffer.sample(
+        state, action, reward, next_state, done = self.replay_buffer.sample(
             self.batch_size)
 
         state = torch.FloatTensor(state).to(device)
