@@ -6,7 +6,7 @@ PARAMS = {
     'value_lr': 1e-3,
     'policy_lr': 1e-4,
     'soft_tau': 1e-2,
-    'batch_size': 128,
+    'batch_size': 64,
     'saving_cycle': 200,
   },
   'sac':{
@@ -17,7 +17,7 @@ PARAMS = {
     'policy_lr': 3e-4,
     'soft_q_lr' : 3e-4,
     'soft_tau': 1e-2,
-    'batch_size': 128,
+    'batch_size': 64,
     'saving_cycle': 200,
     'mean_lambda':1e-3,
     'std_lambda':1e-3,
