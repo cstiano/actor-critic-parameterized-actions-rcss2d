@@ -111,3 +111,11 @@ class TD3(object):
             target_param.data.copy_(
                 target_param.data * (1.0 - soft_tau) + param.data * soft_tau
             )
+    
+    # Save model parameters
+    def save_model(self, actor_model_name=None, critic_model_name=None):
+        pass
+
+    # Load model parameters
+    def load_model(self, actor_path, critic_path):
+        pass
