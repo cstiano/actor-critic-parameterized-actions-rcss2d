@@ -8,7 +8,7 @@ export PYTHONPATH=$PYTHONPATH:$DIR/..
 HFO/bin/HFO --fullstate --no-logging --headless --offense-agents=1 --defense-npcs=1 --offense-team=$1 --defense-team=$2 --trials $3 &
 sleep 5
 # Sleep is needed to make sure doesn't get connected too soon, as unum 1 (goalie)
-python ./src/train/go_to_ball_ddpg.py &
+python ./src/agent/go_to_ball_ddpg.py &
 echo "conectar"
 sleep 4
 
