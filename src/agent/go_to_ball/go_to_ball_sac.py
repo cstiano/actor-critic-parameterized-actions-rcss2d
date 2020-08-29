@@ -3,6 +3,7 @@ import itertools
 import logging
 import os
 import pickle
+import argparse
 
 import hfo
 import numpy as np
@@ -18,6 +19,14 @@ from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_sac import SAC
 
+
+parse = argparse.ArgumentParser(
+    description='Agent Args', formatter_class=argparse.RawTextHelpFormatter)
+parse.add_argument('--play', dest='play', action='store_true',
+                   default=False, help='Agent Playing.')
+args = parse.parse_args()
+
+args = parse.parse_args()
 TEAM = 'HELIOS'
 PORT = 6000
 ENV_ACTIONS = [hfo.DASH]
@@ -32,9 +41,7 @@ hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
                  selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD,
                  selected_state=BALL_AXIS_POSITION_SPACE)
 unum = hfo_env.getUnum()
-
 params = PARAMS['sac']
-
 sac = SAC(hfo_env.observation_space.shape[0],
           hfo_env.action_space.shape[0], params)
 
@@ -95,7 +102,7 @@ def play():
                 break
 
 if __name__ == '__main__':
-    if TRAIN:
-        train()
-    else:
+    if args.play:
         play()
+    else:
+        train()

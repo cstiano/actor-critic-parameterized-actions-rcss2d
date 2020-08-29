@@ -8,6 +8,7 @@ PARAMS = {
     'soft_tau': 1e-2,
     'batch_size': 64,
     'saving_cycle': 200,
+    'noise_factor': 0.01
   },
   'sac':{
     'replay_buffer_size': 1000000,
@@ -22,5 +23,18 @@ PARAMS = {
     'mean_lambda':1e-3,
     'std_lambda':1e-3,
     'z_lambda':0.0
+  },
+  'td3':{
+    'replay_buffer_size': 1000000,
+    'hidden_dim': 256,
+    'gamma': 0.99,
+    'value_lr': 1e-3,
+    'policy_lr': 1e-3,
+    'soft_tau': 1e-2,
+    'batch_size': 64,
+    'saving_cycle': 200,
+    'noise_std': 0.2,
+    'noise_clip': 0.5,
+    'policy_update': 2
   }
 }

@@ -3,6 +3,7 @@ import itertools
 import logging
 import os
 import pickle
+import argparse
 
 import hfo
 import numpy as np
@@ -18,24 +19,25 @@ from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_ddpg import DDPG
 
+parse = argparse.ArgumentParser(
+    description='Agent Args', formatter_class=argparse.RawTextHelpFormatter)
+parse.add_argument('--play', dest='play', action='store_true',
+                   default=False, help='Agent Playing.')
+args = parse.parse_args()
+
 TEAM = 'HELIOS'
 PORT = 6000
 ENV_ACTIONS = [hfo.DASH]
 ENV_REWARDS = [0]
 ACTOR_MODEL_NAME = "ddpg_actor_go_to_ball"
 CRITIC_MODEL_NAME = "ddpg_critic_go_to_ball"
-NOISE_FACTOR = 0.01
-TRAIN = True
-
 
 hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
                  selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD,
                  selected_state=BALL_AXIS_POSITION_SPACE)
 unum = hfo_env.getUnum()
-
 params = PARAMS['ddpg']
-
 ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
 
@@ -53,7 +55,7 @@ def train():
 
             while status == hfo.IN_GAME:
                 action = ddpg.policy_network.get_action(state)
-                action = (action + np.random.normal(0, NOISE_FACTOR, size=hfo_env.action_space.shape[0])).clip(
+                action = (action + np.random.normal(0, params['noise_factor'], size=hfo_env.action_space.shape[0])).clip(
                     hfo_env.action_space.low, hfo_env.action_space.high)
                 action = action.astype(np.float32)
                 next_state, reward, done, status = hfo_env.step(action)
@@ -98,8 +100,9 @@ def play():
             if done:
                 break
 
+
 if __name__ == '__main__':
-    if TRAIN:
-        train()
-    else:
+    if args.play:
         play()
+    else:
+        train()
