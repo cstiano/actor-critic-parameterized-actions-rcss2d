@@ -15,6 +15,10 @@ from src.actor_critic_arch.model.sac_model import *
 from src.lib.utils.replay_buffer import *
 
 
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda" if use_cuda else "cpu")
+
+
 class SAC(object):
     def __init__(self, state_dim, action_dim, params):
         self.hidden_dim = params['hidden_dim']
@@ -105,13 +109,13 @@ class SAC(object):
                 target_param.data * (1.0 - self.soft_tau) +
                 param.data * self.soft_tau
             )
-    
+
      # Save model parameters
     def save_model(self, actor_model_name=None, critic_model_name=None, soft_model_name=None):
         if not os.path.exists('models/'):
             os.makedirs('models/')
         abs_path = os.path.abspath(os.getcwd()) + "/"
-        
+
         actor_path = abs_path + "models/sac_actor"
         if actor_model_name is not None:
             actor_path = abs_path + "models/" + actor_model_name
@@ -127,9 +131,9 @@ class SAC(object):
         torch.save(self.policy_network.state_dict(), actor_path)
         torch.save(self.value_network.state_dict(), critic_path)
         torch.save(self.soft_q_network.state_dict(), soft_path)
-        
 
     # Load model parameters
+
     def load_model(self, actor_path=None, critic_path=None, soft_path=None):
         abs_path = os.path.abspath(os.getcwd()) + "/"
         print('Loading models from {} and {}'.format(actor_path, critic_path))
