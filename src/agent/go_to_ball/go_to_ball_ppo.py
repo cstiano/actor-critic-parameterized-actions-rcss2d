@@ -50,8 +50,7 @@ ppo = PPO(
 def train():
     writer = SummaryWriter(
         'logs/{}_PPO_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
-    Transition = namedtuple(
-        'Transition', ['state', 'action', 'a_log_prob', 'reward', 'next_state'])
+    Transition = namedtuple('Transition', ['s', 'a', 'a_log_p', 'r', 's_'])
 
     try:
         for episode in itertools.count():
