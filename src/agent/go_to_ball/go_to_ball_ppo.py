@@ -65,16 +65,14 @@ def train():
                 action, action_prob = ppo.select_action(state)
                 next_state, reward, done, status = hfo_env.step([action])
 
-                transition = Transition(
-                    state, action, action_prob, reward, next_state)
-                ppo.store_transition(transition)
+                if ppo.store(Transition(state, action, action_prob, reward, next_state)):
+                    ppo.update()
+
                 state = next_state
                 episode_reward += reward
                 step += 1
 
                 if done:
-                    if len(ppo.buffer) >= ppo.batch_size:
-                        ppo.update(episode)
                     break
 
             if (episode % params['saving_cycle']) == 0:

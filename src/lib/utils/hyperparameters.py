@@ -48,7 +48,8 @@ PARAMS = {
     'clip_param': 0.2,
     'max_grad_norm' : 0.5,
     'ppo_update_time': 10,
-    'buffer_capacity': 8000,
-    'batch_size': 32
+    'buffer_capacity': 1000000,
+    'batch_size': 32,
+    'ppo_epoch': 10
   }
 }
