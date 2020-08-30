@@ -20,7 +20,7 @@ class ActionSelector:
             return ([hfo.DRIBBLE_TO, 0.0, 0.0], 3)
         elif self.selected_action == GO_TO_BALL_ACTION:
             return self.get_go_to_ball_action(action)
-        elif self.selected_action == GO_TO_BALL_ACTION_2:
+        elif self.selected_action == GO_TO_BALL_ACTION_WITH_POWER:
             return self.get_go_to_ball_action_with_power(action)
         return ([], 0)
 
