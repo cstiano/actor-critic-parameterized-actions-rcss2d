@@ -18,6 +18,7 @@ from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
 from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.lib.utils.gaussian_exploration import GaussianExploration
+from src.lib.utils.ounoise import OUNoise
 from src.actor_critic_arch.baseline_rlad_td3 import TD3
 
 parse = argparse.ArgumentParser(
@@ -48,7 +49,7 @@ td3 = TD3(
 def train():
     writer = SummaryWriter(
         'logs/{}_TD3_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
-    noise = GaussianExploration(hfo_env.action_space)
+    noise = OUNoise(hfo_env.action_space)
     try:
         for episode in itertools.count():
             status = hfo.IN_GAME
