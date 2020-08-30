@@ -16,13 +16,6 @@ from src.actor_critic_arch.model.ppo_model import *
 
 
 class PPO(object):
-    # clip_param = 0.2
-    # max_grad_norm = 0.5
-    # ppo_update_time = 10
-    # buffer_capacity = 8000
-    # batch_size = 32
-    # gamma = 0.99
-
     def __init__(self, state_dim, action_dim, params):
         super(PPO, self).__init__()
         self.state_dim = state_dim
@@ -45,9 +38,9 @@ class PPO(object):
         self.counter = 0
         self.training_step = 0
 
-        self.actor_optimizer = optim.Adam(self.actor_net.parameters(), 1e-3)
+        self.actor_optimizer = optim.Adam(self.actor_net.parameters(), self.lr)
         self.critic_net_optimizer = optim.Adam(
-            self.critic_net.parameters(), 3e-3)
+            self.critic_net.parameters(), self.lr)
 
     def select_action(self, state):
         state = torch.from_numpy(state).float().unsqueeze(0)
