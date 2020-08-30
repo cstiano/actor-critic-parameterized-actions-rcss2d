@@ -59,7 +59,7 @@ def train():
 
             while status == hfo.IN_GAME:
                 action = sac.policy_network.get_action(state)
-                next_state, reward, done, status = hfo_env.step([action])
+                next_state, reward, done, status = hfo_env.step(action)
 
                 sac.replay_buffer.push(state, action, reward, next_state, done)
 
