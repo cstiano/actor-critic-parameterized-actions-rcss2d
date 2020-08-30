@@ -80,7 +80,11 @@ def train():
                 td3.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
             writer.add_scalar(
                 f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
-        writer.close()
+            
+            if status == hfo.SERVER_DOWN:
+                hfo_env.act(hfo.QUIT)
+                writer.close()
+                exit()
     except KeyboardInterrupt:
         td3.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
         writer.close()

@@ -77,7 +77,11 @@ def train():
                 ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
             writer.add_scalar(
                 f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
-        writer.close()
+            
+            if status == hfo.SERVER_DOWN:
+                hfo_env.act(hfo.QUIT)
+                writer.close()
+                exit()
     except KeyboardInterrupt:
         ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
         writer.close()
@@ -99,6 +103,9 @@ def play():
 
             if done:
                 break
+        if status == hfo.SERVER_DOWN:
+                hfo_env.act(hfo.QUIT)
+                exit()
 
 
 if __name__ == '__main__':
