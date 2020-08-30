@@ -57,11 +57,6 @@ def train():
             while status == hfo.IN_GAME:
                 action = ddpg.policy_network.get_action(state)
                 action = ou_noise.get_action(action, step)
-                
-                # Other strategy here 
-                # action = (action + np.random.normal(0, params['noise_factor'], size=hfo_env.action_space.shape[0])).clip(
-                #     hfo_env.action_space.low, hfo_env.action_space.high)
-                # action = action.astype(np.float32)
 
                 next_state, reward, done, status = hfo_env.step(action)
 
