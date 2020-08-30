@@ -48,7 +48,8 @@ class HFOEnv(hfo.HFOEnvironment):
     def __init__(self, actions, rewards,
                  is_offensive=True, play_goalie=False,
                  strict=False, port=6000, continuous=False, team='base',
-                 selected_action=0, selected_reward=0, selected_state=0):
+                 selected_action=0, selected_reward=0, selected_state=0,
+                 continuous_action_dim=1):
         super(HFOEnv, self).__init__()
         self.connectToServer(hfo.HIGH_LEVEL_FEATURE_SET, './formations-dt',
                              port, 'localhost',
@@ -79,7 +80,7 @@ class HFOEnv(hfo.HFOEnvironment):
                                                       shape=shape)
         if self.continuous:
             self.action_space = ActionSpaceContinuous(
-                -1, 1, actions, shape=(1,))
+                -1, 1, actions, shape=(continuous_action_dim,))
         else:
             self.action_space = ActionSpace(actions)
 
@@ -109,7 +110,8 @@ class HFOEnv(hfo.HFOEnvironment):
 
         # Getting Reward
         self.update_observation_space(done, status)
-        reward = self.reward_selector.get_reward(act, next_strict_state, done, status)
+        reward = self.reward_selector.get_reward(
+            act, next_strict_state, done, status)
 
         return next_state, reward, done, status
 

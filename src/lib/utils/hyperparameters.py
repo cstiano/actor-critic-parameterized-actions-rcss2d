@@ -3,12 +3,12 @@ PARAMS = {
     'replay_buffer_size': 1000000,
     'hidden_dim': 256,
     'gamma': 0.99,
-    'value_lr': 1e-3,
-    'policy_lr': 1e-4,
+    'value_lr': 3e-4,
+    'policy_lr': 3e-4,
     'soft_tau': 1e-2,
     'batch_size': 64,
     'saving_cycle': 200,
-    'noise_factor': 0.01
+    'noise_factor': 0.1
   },
   'sac':{
     'replay_buffer_size': 1000000,
@@ -28,8 +28,8 @@ PARAMS = {
     'replay_buffer_size': 1000000,
     'hidden_dim': 256,
     'gamma': 0.99,
-    'value_lr': 1e-3,
-    'policy_lr': 1e-3,
+    'value_lr': 3e-4,
+    'policy_lr': 3e-4,
     'soft_tau': 1e-2,
     'batch_size': 64,
     'saving_cycle': 200,

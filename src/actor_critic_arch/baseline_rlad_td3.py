@@ -44,9 +44,9 @@ class TD3(object):
         self.target_policy_network = PolicyNetwork(
             state_dim, action_dim, self.hidden_dim).to(device)
 
-        self.soft_update(self.value_network_1, self.target_value_network_1, soft_tau=1.0)
-        self.soft_update(self.value_network_2, self.target_value_network_2, soft_tau=1.0)
-        self.soft_update(self.policy_network, self.target_policy_network, soft_tau=1.0)
+        self.soft_update(self.value_network_1, self.target_value_network_1, soft_tau=self.soft_tau)
+        self.soft_update(self.value_network_2, self.target_value_network_2, soft_tau=self.soft_tau)
+        self.soft_update(self.policy_network, self.target_policy_network, soft_tau=self.soft_tau)
 
         self.value_criterion = nn.MSELoss()
 

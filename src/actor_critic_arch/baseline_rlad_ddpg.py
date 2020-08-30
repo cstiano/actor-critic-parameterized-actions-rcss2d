@@ -65,9 +65,9 @@ class DDPG(object):
 
         state = torch.FloatTensor(state).to(device)
         action = torch.FloatTensor(action).to(device)
-        reward = torch.FloatTensor(reward).to(device)
         next_state = torch.FloatTensor(next_state).to(device)
-        done = torch.FloatTensor(done).to(device)
+        reward = torch.FloatTensor(reward).unsqueeze(1).to(device)
+        done = torch.FloatTensor(np.float32(done)).unsqueeze(1).to(device)
 
         policy_loss = self.value_network(state, self.policy_network(state))
         policy_loss = -policy_loss.mean()
