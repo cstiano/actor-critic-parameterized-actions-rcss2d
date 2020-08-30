@@ -1,5 +1,9 @@
 # tg-repo
 
+```bash
+pip install -r requirements.txt
+```
+
 ## State Space
 0 X position
 1 Y position

@@ -19,7 +19,7 @@ device = torch.device("cuda" if use_cuda else "cpu")
 
 
 class PPO(object):
-    def __ini__(self, state_dim, action_dim, params):
+    def __init__(self, state_dim, action_dim, params):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.hidden_size = params['hidden_dim']
@@ -31,7 +31,7 @@ class PPO(object):
         self.tau = params['tau']
 
         self.model = ActorCritic(
-            state_dim, action_dim, hidden_size).to(device)
+            state_dim, action_dim, self.hidden_size).to(device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
     def ppo_iter(self, states, actions, log_probs, returns, advantage):
