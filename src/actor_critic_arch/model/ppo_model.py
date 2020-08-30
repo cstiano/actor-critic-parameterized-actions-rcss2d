@@ -24,7 +24,7 @@ class ActorNet(nn.Module):
 
 class CriticNet(nn.Module):
     def __init__(self, num_inputs, num_actions, hidden_size):
-        super(Critic, self).__init__()
+        super(CriticNet, self).__init__()
         self.fc1 = nn.Linear(num_inputs, hidden_size)
         self.state_value = nn.Linear(hidden_size, 1)
 
