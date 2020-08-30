@@ -25,8 +25,8 @@ class ActorNet(nn.Module):
 class CriticNet(nn.Module):
     def __init__(self, num_inputs, num_actions, hidden_size):
         super(CriticNet, self).__init__()
-        self.fc1 = nn.Linear(num_inputs, hidden_size)
-        self.state_value = nn.Linear(hidden_size, 1)
+        self.fc = nn.Linear(num_inputs, hidden_size)
+        self.v_head = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
         x = F.relu(self.fc(x))
