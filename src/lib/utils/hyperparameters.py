@@ -36,5 +36,15 @@ PARAMS = {
     'noise_std': 0.2,
     'noise_clip': 0.5,
     'policy_update': 2
+  },
+  'ppo':{
+    'hidden_dim': 256,
+    'gamma': 0.99,
+    'lr': 3e-4,
+    'tau': 1e-2,
+    'mini_batch_size': 5,
+    'saving_cycle': 200,
+    'ppo_epochs': 4,
+    'clip_param': 0.2
   }
 }
