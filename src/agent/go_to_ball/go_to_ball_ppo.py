@@ -63,8 +63,7 @@ def train():
 
             while status == hfo.IN_GAME:
                 action, action_prob = ppo.select_action(state)
-                next_state, reward, done, status = hfo_env.step(
-                    action.cpu().numpy())
+                next_state, reward, done, status = hfo_env.step([action])
 
                 transition = Transition(
                     state, action, action_prob, reward, next_state)
