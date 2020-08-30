@@ -59,7 +59,7 @@ def train():
 
             while status == hfo.IN_GAME:
                 action = td3.policy_network.get_action(state)
-                action = noise.get_action(action)
+                action = noise.get_action(action, step)
                 next_state, reward, done, status = hfo_env.step(action)
 
                 td3.replay_buffer.push(
