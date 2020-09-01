@@ -13,7 +13,7 @@ from torch.utils.tensorboard import SummaryWriter
 from src.lib.hfo_env import HFOEnv
 from src.lib.utils.action_selector import *
 from src.lib.utils.reward_selector import *
-from src.lib.utils.action_selector import GO_TO_BALL_ACTION_WITH_POWER
+from src.lib.utils.action_selector import DASH_WITH_POWER_ACTION
 from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
 from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.ounoise import OUNoise
@@ -35,7 +35,7 @@ CRITIC_MODEL_NAME = "ddpg_critic_go_to_ball_with_power"
 
 hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
-                 selected_action=GO_TO_BALL_ACTION_WITH_POWER, selected_reward=GO_TO_BALL_REWARD,
+                 selected_action=DASH_WITH_POWER_ACTION, selected_reward=GO_TO_BALL_REWARD,
                  selected_state=BALL_AXIS_POSITION_SPACE, continuous_action_dim=2)
 unum = hfo_env.getUnum()
 params = PARAMS['ddpg']
