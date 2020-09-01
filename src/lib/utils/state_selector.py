@@ -5,6 +5,9 @@ DEFAULT_STATE = 0
 BALL_AXIS_POSITION_SPACE = 1
 
 BALL_AXIS_POSITION_SPACE_SHAPE = (2,)
+AGENT_BALL_SPACE_SHAPE = (4,)
+AGENT_ORIENTATION_AND_BALL_POSITION_SPACE = (5,)
+WITHOUT_OPPONENT_INFO_SPACE = (9,)
 
 
 class StateSelector:
@@ -33,3 +36,17 @@ class StateSelector:
         agent_y_relative = agent_position[1] - ball_position[1]
 
         return np.array([agent_x_relative, agent_y_relative])
+
+    def get_agent_and_ball_position_state(self, state):
+        state_wrapper = StateWrapper(state)
+        agent_position = state_wrapper.get_position()
+        ball_position = state_wrapper.get_ball_position()
+        return np.array([agent_position[0], agent_position[1], ball_position[0], ball_position[1]])
+
+    def get_anget_orientation_ball_state(self, state):
+        return np.array(state[0], state[1], state[2], state[3], state[4])
+
+    def get_state_without_opponent_info(self, state):
+        return np.array(state[0], state[1], state[2],
+                        state[3], state[4], state[5],
+                        state[6], state[7], state[8])

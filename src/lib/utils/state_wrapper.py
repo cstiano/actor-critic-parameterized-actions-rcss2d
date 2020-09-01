@@ -1,5 +1,7 @@
 from scipy.spatial import distance
 
+GOAL_CENTER_POSITION = (52.5, 0)
+
 
 class StateWrapper:
     def __init__(self, state=None):
@@ -35,10 +37,10 @@ class StateWrapper:
         ball = self.get_ball_position()
         return distance.euclidean(agent, ball)
     
-    # TODO
     def get_distance_to_goal(self):
-        return 0.0
+        agent = self.get_position()
+        return distance.euclidean(agent, GOAL_CENTER_POSITION)
     
-    # TODO
     def get_ball_distance_to_goal(self):
-        return 0.0
+        ball = self.get_ball_position()
+        return distance.euclidean(ball, GOAL_CENTER_POSITION)
