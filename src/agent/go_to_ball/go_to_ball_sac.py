@@ -76,7 +76,7 @@ def train():
                                CRITIC_MODEL_NAME, SOFT_MODEL_NAME)
             writer.add_scalar(
                 f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
-            
+
             if status == hfo.SERVER_DOWN:
                 hfo_env.act(hfo.QUIT)
                 writer.close()
@@ -104,6 +104,7 @@ def play():
         if status == hfo.SERVER_DOWN:
             hfo_env.act(hfo.QUIT)
             exit()
+
 
 if __name__ == '__main__':
     if args.play:

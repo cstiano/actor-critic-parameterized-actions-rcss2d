@@ -41,6 +41,7 @@ ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
 ou_noise = OUNoise(hfo_env.action_space)
 
+
 def train():
     writer = SummaryWriter(
         'logs/{}_DDPG_GO_TO_BALL_WITH_POWER'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
@@ -75,7 +76,7 @@ def train():
                 ddpg.save_model(ACTOR_MODEL_NAME, CRITIC_MODEL_NAME)
             writer.add_scalar(
                 f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
-            
+
             if status == hfo.SERVER_DOWN:
                 hfo_env.act(hfo.QUIT)
                 writer.close()
