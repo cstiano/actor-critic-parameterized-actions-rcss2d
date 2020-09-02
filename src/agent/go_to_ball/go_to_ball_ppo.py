@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 from src.lib.hfo_env import HFOEnv
 from src.lib.utils.action_selector import *
 from src.lib.utils.reward_selector import *
-from src.lib.utils.action_selector import GO_TO_BALL_ACTION
+from src.lib.utils.action_selector import DASH_ACTION
 from src.lib.utils.reward_selector import GO_TO_BALL_REWARD
 from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
@@ -29,17 +29,15 @@ args = parse.parse_args()
 
 TEAM = 'HELIOS'
 PORT = 6000
-ENV_ACTIONS = [hfo.DASH]
-ENV_REWARDS = [0]
 ACTOR_MODEL_NAME = "ppo_actor_go_to_ball"
 CRITIC_MODEL_NAME = "ppo_critic_go_to_ball"
 
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
-hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
+hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
-                 selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD,
+                 selected_action=DASH_ACTION, selected_reward=GO_TO_BALL_REWARD,
                  selected_state=BALL_AXIS_POSITION_SPACE)
 unum = hfo_env.getUnum()
 params = PARAMS['ppo']

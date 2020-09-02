@@ -45,11 +45,11 @@ class HFOEnv(hfo.HFOEnvironment):
     w_ball_grad = 0.8
     prev_ball_potential = None
 
-    def __init__(self, actions, rewards,
+    def __init__(self, actions=None, rewards=None,
                  is_offensive=True, play_goalie=False,
                  strict=False, port=6000, continuous=False, team='base',
                  selected_action=0, selected_reward=0, selected_state=0,
-                 continuous_action_dim=1):
+                 continuous_action_dim=None):
         super(HFOEnv, self).__init__()
         self.connectToServer(hfo.HIGH_LEVEL_FEATURE_SET, './formations-dt',
                              port, 'localhost',
@@ -62,27 +62,38 @@ class HFOEnv(hfo.HFOEnvironment):
         self.play_goalie = play_goalie
         self.continuous = continuous
 
-        self.action_selector = ActionSelector(selected_action, actions)
+        self.action_selector = ActionSelector(selected_action)
         self.reward_selector = RewardSelector(selected_reward)
         self.state_selector = StateSelector(selected_state)
         self.selected_state = selected_state
 
+        action_space_info = self.action_selector.get_action_space_info()
+        self.actions = actions
+        if self.actions == None:
+            self.actions = action_space_info['actions']
+        self.rewards = rewards
+        if self.rewards is None:
+            self.rewards = action_space_info['env_rewards']
+        self.continuous_action_dim = continuous_action_dim
+        if self.continuous_action_dim == None:
+            self.continuous_action_dim = action_space_info['action_dim']
+        
         # TODO: check the usability of this code
         if not strict:
-            self.observation_space = ObservationSpace(self, rewards)
+            self.observation_space = ObservationSpace(self, self.rewards)
         else:
             shape = self.state_selector.get_shape()
             if self.selected_state == 0:
                 shape = 11 + 3 * self.choosed_mates + 2 * self.choosed_ops
                 shape = (shape,)
             self.observation_space = ObservationSpace(self,
-                                                      rewards,
+                                                      self.rewards,
                                                       shape=shape)
         if self.continuous:
             self.action_space = ActionSpaceContinuous(
-                -1, 1, actions, shape=(continuous_action_dim,))
+                -1, 1, self.actions, shape=(self.continuous_action_dim,))
         else:
-            self.action_space = ActionSpace(actions)
+            self.action_space = ActionSpace(self.actions)
 
     def step(self, action, is_offensive=True):
         # Action is the foward from the neural network (array of actions).

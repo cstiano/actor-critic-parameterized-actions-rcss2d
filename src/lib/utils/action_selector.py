@@ -13,10 +13,9 @@ MAX_DASH = 100
 
 
 class ActionSelector:
-    def __init__(self, selected_action=0, actions=[]):
+    def __init__(self, selected_action=0):
         super().__init__()
         self.selected_action = selected_action
-        self.actions = actions
 
     def get_action(self, action):
         if self.selected_action == TEST_ACTION:
@@ -61,7 +60,7 @@ class ActionSelector:
     def get_dict_info(self, actions, env_rewards_config_action, action_dim):
         return {
             'actions': actions,
-            'env_rewards_config_action': env_rewards_config_action,
+            'env_rewards': env_rewards_config_action,
             'action_dim': action_dim
         }
 

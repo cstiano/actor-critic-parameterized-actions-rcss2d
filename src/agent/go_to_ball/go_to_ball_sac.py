@@ -29,14 +29,11 @@ args = parse.parse_args()
 args = parse.parse_args()
 TEAM = 'HELIOS'
 PORT = 6000
-ENV_ACTIONS = [hfo.DASH]
-ENV_REWARDS = [0]
 ACTOR_MODEL_NAME = "sac_actor_go_to_ball"
 CRITIC_MODEL_NAME = "sac_critic_go_to_ball"
 SOFT_MODEL_NAME = "sac_soft_go_to_ball"
-TRAIN = True
 
-hfo_env = HFOEnv(ENV_ACTIONS, ENV_REWARDS, is_offensive=True, strict=True,
+hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
                  selected_action=GO_TO_BALL_ACTION, selected_reward=GO_TO_BALL_REWARD,
                  selected_state=BALL_AXIS_POSITION_SPACE)
