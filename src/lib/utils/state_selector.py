@@ -59,9 +59,9 @@ class StateSelector:
         return np.array([agent_position[0], agent_position[1], ball_position[0], ball_position[1]])
 
     def get_anget_orientation_ball_state(self, state):
-        return np.array(state[0], state[1], state[2], state[3], state[4])
+        return np.array([state[0], state[1], state[2], state[3], state[4]])
 
     def get_state_without_opponent_info(self, state):
-        return np.array(state[0], state[1], state[2],
+        return np.array([state[0], state[1], state[2],
                         state[3], state[4], state[5],
-                        state[6], state[7], state[8])
+                        state[6], state[7], state[8]])
