@@ -27,6 +27,8 @@ class RewardSelector:
             return self.get_reward_go_to_ball(act, state_wrapper, done, status)
         elif self.selected_reward == BALL_PROXIMITY_GOAL_REWARD:
             return self.get_reward_ball_proximity_goal(act, state_wrapper, done, status)
+        elif self.selected_reward == PAPER_REWARD:
+            return self.get_reward_paper(act, state_wrapper, done, status)
         return 0.0
 
     def get_reward_go_to_ball(self, act, state_wrapper, done, status):
