@@ -72,3 +72,8 @@ class RewardSelector:
         self.last_distance_to_ball = distance_to_ball
         self.last_ball_distance_to_goal = ball_distance_to_goal
         return reward
+
+    def reset(self, state):
+        state_wrapper = StateWrapper(state)
+        self.last_distance_to_ball = state_wrapper.get_distance_to_ball()
+        self.last_ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
