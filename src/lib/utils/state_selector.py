@@ -21,6 +21,12 @@ class StateSelector:
     def get_state(self, state):
         if self.selected_state == BALL_AXIS_POSITION_SPACE:
             return self.get_ball_axis_position_state(state)
+        elif self.selected_state == AGENT_BALL_SPACE_SPACE:
+            return self.get_agent_and_ball_position_state(state)
+        elif self.selected_state == AGENT_ORIENTATION_AND_BALL_POSITION_SPACE:
+            return self.get_anget_orientation_ball_state(state)
+        elif self.selected_state == WITHOUT_OPPONENT_INFO_SPACE:
+            return self.get_state_without_opponent_info(state)
         return np.array([0.0])
 
     def get_shape(self):
