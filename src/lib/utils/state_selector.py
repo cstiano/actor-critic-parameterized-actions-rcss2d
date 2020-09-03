@@ -3,11 +3,14 @@ from src.lib.utils.state_wrapper import *
 
 DEFAULT_STATE = 0
 BALL_AXIS_POSITION_SPACE = 1
+AGENT_BALL_SPACE_SPACE = 2
+AGENT_ORIENTATION_AND_BALL_POSITION_SPACE = 3
+WITHOUT_OPPONENT_INFO_SPACE = 4
 
 BALL_AXIS_POSITION_SPACE_SHAPE = (2,)
 AGENT_BALL_SPACE_SHAPE = (4,)
-AGENT_ORIENTATION_AND_BALL_POSITION_SPACE = (5,)
-WITHOUT_OPPONENT_INFO_SPACE = (9,)
+AGENT_ORIENTATION_AND_BALL_POSITION_SHAPE = (5,)
+WITHOUT_OPPONENT_INFO_SHAPE = (9,)
 
 
 class StateSelector:
@@ -23,6 +26,12 @@ class StateSelector:
     def get_shape(self):
         if self.selected_state == BALL_AXIS_POSITION_SPACE:
             return BALL_AXIS_POSITION_SPACE_SHAPE
+        elif self.selected_state == AGENT_BALL_SPACE_SPACE:
+            return AGENT_BALL_SPACE_SHAPE
+        elif self.selected_state == AGENT_ORIENTATION_AND_BALL_POSITION_SPACE:
+            return AGENT_ORIENTATION_AND_BALL_POSITION_SHAPE
+        elif self.selected_state == WITHOUT_OPPONENT_INFO_SPACE:
+            return WITHOUT_OPPONENT_INFO_SHAPE
         return (0,)
 
     # This state delivers the positon of the agent relative to the ball
