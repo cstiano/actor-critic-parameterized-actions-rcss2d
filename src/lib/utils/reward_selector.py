@@ -7,7 +7,7 @@ BALL_PROXIMITY_GOAL_REWARD = 2
 MAX_DISTANCE = 50.0
 MIN_DISTANCE_TO_BALL = 2.0
 THRESHOLD_DISTANCE = 10.0
-MAX_BALL_DISTANCE_TO_GOAL = 100.0
+MAX_BALL_DISTANCE_TO_GOAL = 30.0
 
 class RewardSelector:
     def __init__(self, selected_reward=0):
@@ -40,6 +40,8 @@ class RewardSelector:
     def get_reward_ball_proximity_goal(self, act, state_wrapper, done, status):
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
         reward = (MAX_BALL_DISTANCE_TO_GOAL - ball_distance_to_goal) / MAX_BALL_DISTANCE_TO_GOAL
+        if ball_distance_to_goal > 30.0:
+            return -1
         if ball_distance_to_goal <= 2.0:
             return 1.0
         if ball_distance_to_goal > self.last_distance_to_ball:
