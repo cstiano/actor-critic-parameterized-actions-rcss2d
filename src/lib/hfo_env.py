@@ -133,7 +133,7 @@ class HFOEnv(hfo.HFOEnvironment):
 
     def reset(self):
         state = self.get_state()
-        self.reward_selector.reset(state)
+        self.reward_selector.reset(self.strict_state(self.getState()))
         return state
 
     def update_observation_space(self, done, status):

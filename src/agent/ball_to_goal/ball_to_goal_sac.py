@@ -51,7 +51,7 @@ def train():
             status = hfo.IN_GAME
             done = True
             state = hfo_env.reset()
-            episode_reward = 0
+            episode_reward = 0.0
             step = 0
 
             while status == hfo.IN_GAME:
