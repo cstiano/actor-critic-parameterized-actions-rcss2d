@@ -50,7 +50,7 @@ def train():
         for episode in itertools.count():
             status = hfo.IN_GAME
             done = True
-            state = hfo_env.get_state()
+            state = hfo_env.reset()
             episode_reward = 0
             step = 0
 
@@ -90,7 +90,7 @@ def play():
     for episode in itertools.count():
         status = hfo.IN_GAME
         done = True
-        state = hfo_env.get_state()
+        state = hfo_env.reset()
 
         while status == hfo.IN_GAME:
             action = sac.policy_network.get_action(state)
