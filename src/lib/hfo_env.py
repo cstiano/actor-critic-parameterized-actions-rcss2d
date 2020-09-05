@@ -135,6 +135,10 @@ class HFOEnv(hfo.HFOEnvironment):
         state = self.get_state()
         self.reward_selector.reset(self.strict_state(self.getState()))
         return state
+    
+    # Goal is to be used in HER architecture
+    def get_goal(self):
+        return self.state_selector.get_state(self.strict_state(self.getState()))
 
     def update_observation_space(self, done, status):
         if done:
