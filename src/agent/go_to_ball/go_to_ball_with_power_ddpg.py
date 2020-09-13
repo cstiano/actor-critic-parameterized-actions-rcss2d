@@ -19,6 +19,7 @@ from src.lib.utils.state_selector import BALL_AXIS_POSITION_SPACE
 from src.lib.utils.ounoise import OUNoise
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_ddpg import DDPG
+from src.lib.utils.replay_buffer import *
 
 parse = argparse.ArgumentParser(
     description='Agent Args', formatter_class=argparse.RawTextHelpFormatter)
@@ -40,6 +41,7 @@ params = PARAMS['ddpg']
 ddpg = DDPG(
     hfo_env.observation_space.shape[0], hfo_env.action_space.shape[0], params)
 ou_noise = OUNoise(hfo_env.action_space)
+replay_buffer = ReplayBuffer(params['replay_buffer_size'])
 
 
 def train():
@@ -59,11 +61,11 @@ def train():
 
                 next_state, reward, done, status = hfo_env.step(action)
 
-                ddpg.replay_buffer.push(
+                replay_buffer.push(
                     state, action, reward, next_state, done)
 
-                if len(ddpg.replay_buffer) > params['batch_size']:
-                    ddpg.ddpg_update()
+                if len(replay_buffer) > params['batch_size']:
+                    ddpg.ddpg_update(replay_buffer)
 
                 state = next_state
                 episode_reward += reward

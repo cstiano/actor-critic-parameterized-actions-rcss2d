@@ -56,12 +56,14 @@ class DDPG(object):
 
         self.value_criterion = nn.MSELoss()
 
-        self.replay_buffer_size = params['replay_buffer_size']
-        self.replay_buffer = ReplayBuffer(self.replay_buffer_size)
+    def ddpg_update(self, memory):
+        if type(memory) is ReplayBuffer:
+            state, action, reward, next_state, done = memory.sample(self.batch_size)
 
-    def ddpg_update(self):
-        state, action, reward, next_state, done = self.replay_buffer.sample(
-            self.batch_size)
+        elif type(memory) is ReplayGMemory:
+            state, action, reward, next_state, mask, goal = memory.sample(self.batch_size)
+            state = np.concatenate([state, goal], axis=1)
+            next_state = np.concatenate([next_state, goal], axis=1)
 
         state = torch.FloatTensor(state).to(device)
         action = torch.FloatTensor(action).to(device)

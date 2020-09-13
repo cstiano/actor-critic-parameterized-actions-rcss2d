@@ -57,11 +57,14 @@ class TD3(object):
         self.value_optimizer2 = optim.Adam(self.value_network_2.parameters(), lr=self.value_lr)
         self.policy_optimizer = optim.Adam(self.policy_network.parameters(), lr=self.policy_lr)
 
-        self.replay_buffer = ReplayBuffer(params['replay_buffer_size'])
+    def td3_update(self, memory, step):
+        if type(memory) is ReplayBuffer:
+            state, action, reward, next_state, done = memory.sample(self.batch_size)
 
-    def td3_update(self, step):
-        state, action, reward, next_state, done = self.replay_buffer.sample(
-            self.batch_size)
+        elif type(memory) is ReplayGMemory:
+            state, action, reward, next_state, mask, goal = memory.sample(self.batch_size)
+            state = np.concatenate([state, goal], axis=1)
+            next_state = np.concatenate([next_state, goal], axis=1)
 
         state = torch.FloatTensor(state).to(device)
         next_state = torch.FloatTensor(next_state).to(device)

@@ -56,12 +56,14 @@ class SAC(object):
         self.policy_optimizer = optim.Adam(
             self.policy_network.parameters(), lr=self.policy_lr)
 
-        self.replay_buffer_size = params['replay_buffer_size']
-        self.replay_buffer = ReplayBuffer(self.replay_buffer_size)
+    def soft_q_update(self, memory):
+        if type(memory) is ReplayBuffer:
+            state, action, reward, next_state, done = memory.sample(self.batch_size)
 
-    def soft_q_update(self):
-        state, action, reward, next_state, done = self.replay_buffer.sample(
-            self.batch_size)
+        elif type(memory) is ReplayGMemory:
+            state, action, reward, next_state, mask, goal = memory.sample(self.batch_size)
+            state = np.concatenate([state, goal], axis=1)
+            next_state = np.concatenate([next_state, goal], axis=1)
 
         state = torch.FloatTensor(state).to(device)
         next_state = torch.FloatTensor(next_state).to(device)
