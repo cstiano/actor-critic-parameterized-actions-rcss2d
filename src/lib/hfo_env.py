@@ -139,6 +139,10 @@ class HFOEnv(hfo.HFOEnvironment):
     # Goal is to be used in HER architecture
     def get_goal(self):
         return self.state_selector.get_state(self.strict_state(self.getState()))
+    
+    def compute_reward(self, achieved_goal, desired_goal):
+        # TODO the reward calculation for the goal.
+        pass
 
     def update_observation_space(self, done, status):
         if done:

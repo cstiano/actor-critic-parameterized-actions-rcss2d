@@ -18,6 +18,7 @@ from src.lib.utils.reward_selector import PAPER_REWARD
 from src.lib.utils.state_selector import AGENT_ORIENTATION_AND_BALL_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_sac import SAC
+from src.lib.utils.replay_buffer import *
 
 
 parse = argparse.ArgumentParser(
@@ -41,7 +42,7 @@ unum = hfo_env.getUnum()
 params = PARAMS['sac']
 sac = SAC(hfo_env.observation_space.shape[0],
           hfo_env.action_space.shape[0], params)
-
+replay_buffer = ReplayBuffer(params['replay_buffer_size'])
 
 def train():
     writer = SummaryWriter(
@@ -58,10 +59,10 @@ def train():
                 action = sac.policy_network.get_action(state)
                 next_state, reward, done, status = hfo_env.step(action)
 
-                sac.replay_buffer.push(state, action, reward, next_state, done)
+                replay_buffer.push(state, action, reward, next_state, done)
 
-                if len(sac.replay_buffer) > params['batch_size']:
-                    sac.soft_q_update()
+                if len(replay_buffer) > params['batch_size']:
+                    sac.soft_q_update(replay_buffer)
 
                 state = next_state
                 episode_reward += reward
