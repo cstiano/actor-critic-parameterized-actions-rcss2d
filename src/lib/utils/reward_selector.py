@@ -5,11 +5,16 @@ TEST_REWARD = 0
 GO_TO_BALL_REWARD = 1
 BALL_PROXIMITY_GOAL_REWARD = 2
 PAPER_REWARD = 3
+BALL_POTENCIAL_DIFF_REWARD = 4
 
 MAX_DISTANCE = 50.0
 MIN_DISTANCE_TO_BALL = 2.0
 THRESHOLD_DISTANCE = 10.0
 MAX_BALL_DISTANCE_TO_GOAL = 30.0
+
+HALF_GOAL_SIZE = 7.2
+HALF_X_AXIS_SIZE = 52.5
+HALF_Y_AXIS_SIZE = 34.0
 
 class RewardSelector:
     def __init__(self, selected_reward=0):
@@ -29,6 +34,8 @@ class RewardSelector:
             return self.get_reward_ball_proximity_goal(act, state_wrapper, done, status)
         elif self.selected_reward == PAPER_REWARD:
             return self.get_reward_paper(act, state_wrapper, done, status)
+        elif self.selected_reward == BALL_POTENCIAL_DIFF_REWARD:
+            return self.get_reward_ball_potencial(act, state_wrapper, done, status)
         return 0.0
 
     def get_reward_go_to_ball(self, act, state_wrapper, done, status):
@@ -44,11 +51,9 @@ class RewardSelector:
     def get_reward_ball_proximity_goal(self, act, state_wrapper, done, status):
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
         reward = (MAX_BALL_DISTANCE_TO_GOAL - ball_distance_to_goal) / MAX_BALL_DISTANCE_TO_GOAL
-        if ball_distance_to_goal > self.last_distance_to_ball:
+        if ball_distance_to_goal > self.last_ball_distance_to_goal:
             reward = (-1.0) * (1.0 - reward)
         self.last_ball_distance_to_goal = ball_distance_to_goal
-        if ball_distance_to_goal > 30.0:
-            return -1
         if ball_distance_to_goal <= 2.0:
             return 1.0
         return reward
@@ -72,6 +77,18 @@ class RewardSelector:
         self.last_distance_to_ball = distance_to_ball
         self.last_ball_distance_to_goal = ball_distance_to_goal
         return reward
+    
+    def get_reward_ball_potencial(self, act, state_wrapper, done, status):
+        ball_position = state_wrapper.get_ball_position()
+        ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
+
+        potencial_difference = self.last_ball_distance_to_goal - ball_distance_to_goal
+        self.last_ball_distance_to_goal = ball_distance_to_goal
+
+        if ball_position[0] > HALF_X_AXIS_SIZE and abs(ball_position[1]) < HALF_GOAL_SIZE:
+            return 1000.0
+        
+        return potencial_difference
 
     def reset(self, state):
         state_wrapper = StateWrapper(state)

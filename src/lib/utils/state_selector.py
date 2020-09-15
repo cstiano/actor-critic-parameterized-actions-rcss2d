@@ -24,7 +24,7 @@ class StateSelector:
         elif self.selected_state == AGENT_BALL_SPACE_SPACE:
             return self.get_agent_and_ball_position_state(state)
         elif self.selected_state == AGENT_ORIENTATION_AND_BALL_POSITION_SPACE:
-            return self.get_anget_orientation_ball_state(state)
+            return self.get_agent_orientation_ball_state(state)
         elif self.selected_state == WITHOUT_OPPONENT_INFO_SPACE:
             return self.get_state_without_opponent_info(state)
         return np.array([0.0])
@@ -58,7 +58,7 @@ class StateSelector:
         ball_position = state_wrapper.get_ball_position()
         return np.array([agent_position[0], agent_position[1], ball_position[0], ball_position[1]])
 
-    def get_anget_orientation_ball_state(self, state):
+    def get_agent_orientation_ball_state(self, state):
         return np.array([state[0], state[1], state[2], state[3], state[4]])
 
     def get_state_without_opponent_info(self, state):

@@ -27,3 +27,4 @@ pip install -r requirements.txt
 - X - 105.0 (2 * 52.5)
 - Y - 68.0 (2 * 34)
 - Diagonal = 125.1
+- 14.4 (goal)
