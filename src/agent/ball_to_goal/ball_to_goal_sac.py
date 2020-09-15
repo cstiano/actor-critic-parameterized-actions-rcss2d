@@ -14,7 +14,7 @@ from src.lib.hfo_env import HFOEnv
 from src.lib.utils.action_selector import *
 from src.lib.utils.reward_selector import *
 from src.lib.utils.action_selector import DASH_OR_KICK_ACTION
-from src.lib.utils.reward_selector import PAPER_REWARD
+from src.lib.utils.reward_selector import AGENT_AND_BALL_POTENCIAL_REWARD
 from src.lib.utils.state_selector import AGENT_ORIENTATION_AND_BALL_POSITION_SPACE
 from src.lib.utils.hyperparameters import PARAMS
 from src.actor_critic_arch.baseline_rlad_sac import SAC
@@ -36,7 +36,7 @@ SOFT_MODEL_NAME = "sac_soft_ball_to_goal"
 
 hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
-                 selected_action=DASH_OR_KICK_ACTION, selected_reward=PAPER_REWARD,
+                 selected_action=DASH_OR_KICK_ACTION, selected_reward=AGENT_AND_BALL_POTENCIAL_REWARD,
                  selected_state=AGENT_ORIENTATION_AND_BALL_POSITION_SPACE)
 unum = hfo_env.getUnum()
 params = PARAMS['sac']

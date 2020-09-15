@@ -6,6 +6,7 @@ GO_TO_BALL_REWARD = 1
 BALL_PROXIMITY_GOAL_REWARD = 2
 PAPER_REWARD = 3
 BALL_POTENCIAL_DIFF_REWARD = 4
+AGENT_AND_BALL_POTENCIAL_REWARD = 5
 
 MAX_DISTANCE = 50.0
 MIN_DISTANCE_TO_BALL = 2.0
@@ -36,6 +37,8 @@ class RewardSelector:
             return self.get_reward_paper(act, state_wrapper, done, status)
         elif self.selected_reward == BALL_POTENCIAL_DIFF_REWARD:
             return self.get_reward_ball_potencial(act, state_wrapper, done, status)
+        elif self.selected_reward == AGENT_AND_BALL_POTENCIAL_REWARD:
+            return self.get_reward_agent_and_ball_potencial(act, state_wrapper, done, status)
         return 0.0
 
     def get_reward_go_to_ball(self, act, state_wrapper, done, status):
@@ -89,6 +92,22 @@ class RewardSelector:
             return 1000.0
         
         return potencial_difference
+    
+    def get_reward_agent_and_ball_potencial(self, act, state_wrapper, done, status):
+        ball_position = state_wrapper.get_ball_position()
+        ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
+        distance_to_ball = state_wrapper.get_distance_to_ball()
+
+        agent_potencial_difference_to_ball = self.last_distance_to_ball - distance_to_ball
+        self.last_distance_to_ball = distance_to_ball
+        potencial_difference = self.last_ball_distance_to_goal - ball_distance_to_goal
+        self.last_ball_distance_to_goal = ball_distance_to_goal
+
+        if ball_position[0] > HALF_X_AXIS_SIZE and abs(ball_position[1]) < HALF_GOAL_SIZE:
+            return 100.0
+        
+        return agent_potencial_difference_to_ball + (3.0 * potencial_difference)
+
 
     def reset(self, state):
         state_wrapper = StateWrapper(state)
