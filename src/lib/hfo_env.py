@@ -66,6 +66,8 @@ class HFOEnv(hfo.HFOEnvironment):
         self.reward_selector = RewardSelector(selected_reward)
         self.state_selector = StateSelector(selected_state)
         self.selected_state = selected_state
+        self.last_state = None
+        self.last_strict_state = None
 
         action_space_info = self.action_selector.get_action_space_info()
         self.actions = actions
@@ -116,13 +118,20 @@ class HFOEnv(hfo.HFOEnvironment):
         done = True
         if status == hfo.IN_GAME:
             done = False
+
         next_state = self.get_state()
         next_strict_state = self.strict_state(self.getState())
+        if done:
+            next_state = self.last_state
+            next_strict_state = self.last_strict_state
 
         # Getting Reward
         self.update_observation_space(done, status)
         reward = self.reward_selector.get_reward(
             act, next_strict_state, done, status)
+
+        self.last_state = next_state
+        self.last_strict_state = next_strict_state
 
         return next_state, reward, done, status
 

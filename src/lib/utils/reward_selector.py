@@ -88,8 +88,8 @@ class RewardSelector:
         potencial_difference = self.last_ball_distance_to_goal - ball_distance_to_goal
         self.last_ball_distance_to_goal = ball_distance_to_goal
 
-        if ball_position[0] > HALF_X_AXIS_SIZE and abs(ball_position[1]) < HALF_GOAL_SIZE:
-            return 1000.0
+        if status == hfo.GOAL:
+            return 100.0
         
         return potencial_difference
     
@@ -103,7 +103,7 @@ class RewardSelector:
         potencial_difference = self.last_ball_distance_to_goal - ball_distance_to_goal
         self.last_ball_distance_to_goal = ball_distance_to_goal
 
-        if ball_position[0] > HALF_X_AXIS_SIZE and abs(ball_position[1]) < HALF_GOAL_SIZE:
+        if status == hfo.GOAL:
             return 100.0
         
         return agent_potencial_difference_to_ball + (3.0 * potencial_difference)
