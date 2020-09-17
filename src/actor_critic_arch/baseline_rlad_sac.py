@@ -128,7 +128,7 @@ class SAC(object):
 
         soft_path = abs_path + "models/sac_soft"
         if soft_model_name is not None:
-            soft_path = abs_path + "models/" + critic_model_name
+            soft_path = abs_path + "models/" + soft_model_name
         print('Saving models to {} and {}'.format(actor_path, critic_path))
         torch.save(self.policy_network.state_dict(), actor_path)
         torch.save(self.value_network.state_dict(), critic_path)
