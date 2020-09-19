@@ -98,8 +98,11 @@ class HFOEnv(hfo.HFOEnvironment):
             self.action_space = ActionSpace(self.actions)
 
     def step(self, action, is_offensive=True):
-        # Action is the foward from the neural network (array of actions).
+        # Update the action selector for conditional actions.
+        self.action_selector.update_if_necessary(self.last_strict_state)
 
+        # Action is the foward from the neural network (array of actions).
+        # Get the selected parameterized action using the forward nn action.
         (result_action, params_action) = self.action_selector.get_action(action)
         action = result_action[0]
         if params_action == 1:

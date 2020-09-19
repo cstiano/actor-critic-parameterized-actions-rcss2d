@@ -1,5 +1,5 @@
 from src.lib.utils.state_wrapper import StateWrapper
-import hfo 
+import hfo
 
 TEST_REWARD = 0
 GO_TO_BALL_REWARD = 1
@@ -12,10 +12,14 @@ MAX_DISTANCE = 50.0
 MIN_DISTANCE_TO_BALL = 2.0
 THRESHOLD_DISTANCE = 10.0
 MAX_BALL_DISTANCE_TO_GOAL = 30.0
-
 HALF_GOAL_SIZE = 7.2
 HALF_X_AXIS_SIZE = 52.5
 HALF_Y_AXIS_SIZE = 34.0
+
+GOAL_FACTOR = 1000.0
+POTENCIAL_BALL_FACTOR = 100.0
+AGENT_POTENCIAL_FACTOR = 10.0
+
 
 class RewardSelector:
     def __init__(self, selected_reward=0):
@@ -50,17 +54,18 @@ class RewardSelector:
         if distance_to_ball <= 2.0:
             return 1.0
         return reward
-    
+
     def get_reward_ball_proximity_goal(self, act, state_wrapper, done, status):
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
-        reward = (MAX_BALL_DISTANCE_TO_GOAL - ball_distance_to_goal) / MAX_BALL_DISTANCE_TO_GOAL
+        reward = (MAX_BALL_DISTANCE_TO_GOAL -
+                  ball_distance_to_goal) / MAX_BALL_DISTANCE_TO_GOAL
         if ball_distance_to_goal > self.last_ball_distance_to_goal:
             reward = (-1.0) * (1.0 - reward)
         self.last_ball_distance_to_goal = ball_distance_to_goal
         if ball_distance_to_goal <= 2.0:
             return 1.0
         return reward
-    
+
     def get_reward_paper(self, act, state_wrapper, done, status):
         distance_to_ball = state_wrapper.get_distance_to_ball()
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
@@ -71,7 +76,7 @@ class RewardSelector:
             i_kick = 1.0
         if status == hfo.GOAL:
             i_goal = 5.0
-        
+
         r_dist_ball = self.last_distance_to_ball - distance_to_ball
         r_dist_goal = self.last_ball_distance_to_goal - ball_distance_to_goal
 
@@ -80,7 +85,7 @@ class RewardSelector:
         self.last_distance_to_ball = distance_to_ball
         self.last_ball_distance_to_goal = ball_distance_to_goal
         return reward
-    
+
     def get_reward_ball_potencial(self, act, state_wrapper, done, status):
         ball_position = state_wrapper.get_ball_position()
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
@@ -89,10 +94,10 @@ class RewardSelector:
         self.last_ball_distance_to_goal = ball_distance_to_goal
 
         if status == hfo.GOAL:
-            return 100.0
-        
+            return GOAL_FACTOR
+
         return potencial_difference
-    
+
     def get_reward_agent_and_ball_potencial(self, act, state_wrapper, done, status):
         ball_position = state_wrapper.get_ball_position()
         ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
@@ -104,10 +109,9 @@ class RewardSelector:
         self.last_ball_distance_to_goal = ball_distance_to_goal
 
         if status == hfo.GOAL:
-            return 100.0
-        
-        return agent_potencial_difference_to_ball + (3.0 * potencial_difference)
+            return GOAL_FACTOR
 
+        return (AGENT_POTENCIAL_FACTOR * agent_potencial_difference_to_ball) + (POTENCIAL_BALL_FACTOR * potencial_difference)
 
     def reset(self, state):
         state_wrapper = StateWrapper(state)

@@ -8,6 +8,7 @@ DASH_OR_KICK_OR_TURN_ACTION = 3
 ALL_LOW_ACTIONS = 4
 ALL_MID_ACTIONS = 5
 DRIBBLE_ACTION = 6
+CONDITIONAL_DASH_OR_KICK_ACTION = 7
 
 MAX_DASH = 100
 
@@ -16,6 +17,12 @@ class ActionSelector:
     def __init__(self, selected_action=0):
         super().__init__()
         self.selected_action = selected_action
+        self.kickable = None
+    
+    def update_if_necessary(self, state):
+        if self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
+            # Update the kickable with the current state
+            self.kickable = bool(state[5])
 
     def get_action(self, action):
         if self.selected_action == TEST_ACTION:
@@ -34,6 +41,8 @@ class ActionSelector:
             return self.get_mid_level_action(action)
         elif self.selected_action == DRIBBLE_ACTION:
             return self.get_dribble_action(action)
+        elif self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
+            return self.get_conditional_dash_or_kick(action)
         return ([], 0)
 
     def get_action_space_info(self):
@@ -55,7 +64,9 @@ class ActionSelector:
                                       [0, 0, 0, 0], 4)
         elif self.selected_action == DRIBBLE_ACTION:
             return self.get_dict_info([hfo.DRIBBLE_TO], [0], 2)
-        return ([], 0)
+        elif self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
+            return self.get_dict_info([hfo.DASH, hfo.KICK], [0, 0], 3)
+        return ([], [], 0)
 
     def get_dict_info(self, actions, env_rewards_config_action, action_dim):
         return {
@@ -119,3 +130,17 @@ class ActionSelector:
 
     def get_dribble_action(self, action):
         return ([hfo.DRIBBLE_TO, action[0], action[1]], 3)
+    
+    def get_conditional_dash_or_kick(self, action):
+        if self.kickable:
+            angle = float(action[1] * 180.0)
+            if action[0] < 0:
+                power = float(action[2] * 100)
+                return ([hfo.DASH, power, angle], 3)
+            else:
+                power = float(((action[2] + 1.0) * 0.5) * 100)
+                return ([hfo.KICK, power, angle], 3)
+        else:    
+            angle = float(action[1] * 180.0)
+            power = float(action[2] * 100)
+            return ([hfo.DASH, power, angle], 3)
