@@ -99,10 +99,7 @@ class HFOEnv(hfo.HFOEnvironment):
 
     def step(self, action, is_offensive=True):
         # Update the action selector for conditional actions.
-        if self.last_strict_state == None:
-            self.action_selector.update_if_necessary(self.strict_state(self.getState()))
-        else:
-            self.action_selector.update_if_necessary(self.last_strict_state)
+        self.action_selector.update_if_necessary(self.strict_state(self.getState()))
 
         # Action is the foward from the neural network (array of actions).
         # Get the selected parameterized action using the forward nn action.
