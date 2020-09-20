@@ -44,3 +44,7 @@ PENALTY_MEDIUM_ENV = 9
 PENALTY_HIGH_ENV = 10
 PENALTY_MEDIUM_STATIC_ENV = 11
 PENALTY_HIGH_STATIC_ENV = 12
+
+## Experiments
+
+- 200 untouch, 1000 full time, 11 - ball to goal (conditional)
