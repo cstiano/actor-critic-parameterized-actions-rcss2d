@@ -33,6 +33,7 @@ PORT = 6000
 ACTOR_MODEL_NAME = "sac_actor_ball_to_goal"
 CRITIC_MODEL_NAME = "sac_critic_ball_to_goal"
 SOFT_MODEL_NAME = "sac_soft_ball_to_goal"
+ENABLE_LOSS_WRITE = False
 
 hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
@@ -47,6 +48,8 @@ replay_buffer = ReplayBuffer(params['replay_buffer_size'])
 def train():
     writer = SummaryWriter(
         'logs/{}_SAC_BALL_TO_GOAL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
+    frame_idx = 0
+    
     try:
         for episode in itertools.count():
             status = hfo.IN_GAME
@@ -62,7 +65,13 @@ def train():
                 replay_buffer.push(state, action, reward, next_state, done)
 
                 if len(replay_buffer) > params['batch_size']:
-                    sac.soft_q_update(replay_buffer)
+                    q_value_loss, value_loss, policy_loss = sac.soft_q_update(replay_buffer)
+                    
+                    if ENABLE_LOSS_WRITE:
+                        writer.add_scalar(f'Q_Value_Loss', q_value_loss, frame_idx)
+                        writer.add_scalar(f'Value_Loss', value_loss, frame_idx)
+                        writer.add_scalar(f'Policy_Loss', policy_loss, frame_idx)
+                        frame_idx += 1 
 
                 state = next_state
                 episode_reward += reward

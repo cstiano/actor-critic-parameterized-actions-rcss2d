@@ -108,6 +108,8 @@ class TD3(object):
             self.soft_update(self.value_network_1, self.target_value_network_1, soft_tau=self.soft_tau)
             self.soft_update(self.value_network_2, self.target_value_network_2, soft_tau=self.soft_tau)
             self.soft_update(self.policy_network, self.target_policy_network, soft_tau=self.soft_tau)
+        
+        return value_loss1.item(), value_loss2.item(), policy_loss.item()
 
     def soft_update(self, network, target_network, soft_tau=1e-2):
         for target_param, param in zip(target_network.parameters(), network.parameters()):
@@ -144,6 +146,6 @@ class TD3(object):
             self.policy_network.load_state_dict(torch.load(actor_path))
         if critic_path is not None:
             critic_path_1 = abs_path + "models/" + critic_path + "_1"
-            critic_path_2 = abs_path + "models/" + critic_path + "_1"
+            critic_path_2 = abs_path + "models/" + critic_path + "_2"
             self.value_network_1.load_state_dict(torch.load(critic_path_1))
             self.value_network_2.load_state_dict(torch.load(critic_path_2))

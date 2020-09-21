@@ -103,6 +103,8 @@ class DDPG(object):
                 target_param.data * (1.0 - self.soft_tau) +
                 param.data * self.soft_tau
             )
+        
+        return value_loss.item(), policy_loss.item()
 
     # Save model parameters
     def save_model(self, actor_model_name=None, critic_model_name=None):

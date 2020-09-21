@@ -33,6 +33,7 @@ PORT = 6000
 ACTOR_MODEL_NAME = "sac_actor_go_to_ball"
 CRITIC_MODEL_NAME = "sac_critic_go_to_ball"
 SOFT_MODEL_NAME = "sac_soft_go_to_ball"
+ENABLE_LOSS_WRITE = False
 
 hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
@@ -66,10 +67,12 @@ def train():
 
                 if len(replay_buffer) > params['batch_size']:
                     q_value_loss, value_loss, policy_loss = sac.soft_q_update(replay_buffer)
-                    writer.add_scalar(f'Q_Value_Loss', q_value_loss, frame_idx)
-                    writer.add_scalar(f'Value_Loss', value_loss, frame_idx)
-                    writer.add_scalar(f'Policy_Loss', policy_loss, frame_idx)
-                    frame_idx += 1 
+                    
+                    if ENABLE_LOSS_WRITE:
+                        writer.add_scalar(f'Q_Value_Loss', q_value_loss, frame_idx)
+                        writer.add_scalar(f'Value_Loss', value_loss, frame_idx)
+                        writer.add_scalar(f'Policy_Loss', policy_loss, frame_idx)
+                        frame_idx += 1 
 
                 state = next_state
                 episode_reward += reward

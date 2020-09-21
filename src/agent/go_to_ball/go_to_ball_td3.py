@@ -32,6 +32,7 @@ TEAM = 'HELIOS'
 PORT = 6000
 ACTOR_MODEL_NAME = "td3_actor_go_to_ball"
 CRITIC_MODEL_NAME = "td3_critic_go_to_ball"
+ENABLE_LOSS_WRITE = False
 
 hfo_env = HFOEnv(is_offensive=True, strict=True,
                  continuous=True, team=TEAM, port=PORT,
@@ -48,6 +49,8 @@ def train():
     writer = SummaryWriter(
         'logs/{}_TD3_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
     noise = OUNoise(hfo_env.action_space)
+    frame_idx = 0
+
     try:
         for episode in itertools.count():
             status = hfo.IN_GAME
@@ -65,7 +68,13 @@ def train():
                     state, action, reward, next_state, done)
 
                 if len(replay_buffer) > params['batch_size']:
-                    td3.td3_update(replay_buffer, step)
+                    value_loss1, value_loss2, policy_loss = td3.td3_update(replay_buffer, step)
+
+                    if ENABLE_LOSS_WRITE:
+                        writer.add_scalar(f'Value_Loss1', value_loss1, frame_idx)
+                        writer.add_scalar(f'Value_Loss2', value_loss2, frame_idx)
+                        writer.add_scalar(f'Policy_Loss', policy_loss, frame_idx)
+                        frame_idx += 1 
 
                 state = next_state
                 episode_reward += reward
