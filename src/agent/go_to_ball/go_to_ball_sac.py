@@ -47,6 +47,8 @@ replay_buffer = ReplayBuffer(params['replay_buffer_size'])
 def train():
     writer = SummaryWriter(
         'logs/{}_SAC_GO_TO_BALL'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")))
+    frame_idx = 0
+
     try:
         for episode in itertools.count():
             status = hfo.IN_GAME
@@ -63,7 +65,11 @@ def train():
                 replay_buffer.push(state, action, reward, next_state, done)
 
                 if len(replay_buffer) > params['batch_size']:
-                    sac.soft_q_update(replay_buffer)
+                    q_value_loss, value_loss, policy_loss = sac.soft_q_update(replay_buffer)
+                    writer.add_scalar(f'Q_Value_Loss', q_value_loss, frame_idx)
+                    writer.add_scalar(f'Value_Loss', value_loss, frame_idx)
+                    writer.add_scalar(f'Policy_Loss', policy_loss, frame_idx)
+                    frame_idx += 1 
 
                 state = next_state
                 episode_reward += reward
@@ -76,7 +82,7 @@ def train():
                 sac.save_model(ACTOR_MODEL_NAME,
                                CRITIC_MODEL_NAME, SOFT_MODEL_NAME)
             writer.add_scalar(
-                f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
+                f'Rewards/epi_reward', episode_reward, global_step=episode)
 
             if status == hfo.SERVER_DOWN:
                 hfo_env.act(hfo.QUIT)
