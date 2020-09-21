@@ -107,7 +107,7 @@ def train():
                 sac.save_model(ACTOR_MODEL_NAME,
                                CRITIC_MODEL_NAME, SOFT_MODEL_NAME)
             writer.add_scalar(
-                f'Rewards/epi_reward_{unum}', episode_reward, global_step=episode)
+                f'Rewards/epi_reward', episode_reward, global_step=episode)
 
             if status == hfo.SERVER_DOWN:
                 hfo_env.act(hfo.QUIT)
