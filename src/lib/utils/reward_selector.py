@@ -1,5 +1,6 @@
 from src.lib.utils.state_wrapper import StateWrapper
 import hfo
+from math import *
 
 TEST_REWARD = 0
 GO_TO_BALL_REWARD = 1
@@ -79,6 +80,12 @@ class RewardSelector:
             return 1.0
 
         return agent_potencial_difference_to_ball
+    
+    def get_reward_paper_skill(self, act, state_wrapper, done, status):
+        distance_to_ball = state_wrapper.get_distance_to_ball()
+        if bool(state_wrapper.is_able_to_kick):
+            return 100.0
+        return (5 / pow(2 * math.pi, 1 / 2)) * math.exp(-((distance_to_ball*0.001)**2) / 2) - 2 
 
     def get_reward_paper(self, act, state_wrapper, done, status):
         distance_to_ball = state_wrapper.get_distance_to_ball()

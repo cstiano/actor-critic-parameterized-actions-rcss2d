@@ -44,3 +44,21 @@ class StateWrapper:
     def get_ball_distance_to_goal(self):
         ball = self.get_ball_position()
         return distance.euclidean(ball, GOAL_CENTER_POSITION)
+    
+    # TODO
+    # def getRelativeRobotToBallAngle(self):
+    #     agent = self.get_position()
+    #     ball = self.get_ball_position()
+    #     dist_left = [ball[0] - agent[0], ball[1] - agent[1]]
+    #     angle_left = self.toPiRange(angle(dist_left[0], dist_left[1]) - frame.robotsBlue[0].theta)
+    #     #print(angle_left)
+    #     return angle_left
+    
+    # def toPiRange(self, angle):
+    #     angle = math.fmod(angle, 2 * math.pi)
+    #     if angle < -math.pi:
+    #         angle = angle + 2 * math.pi
+    #     elif angle > math.pi:
+    #         angle = angle - 2 * math.pi
+
+    #     return angle
