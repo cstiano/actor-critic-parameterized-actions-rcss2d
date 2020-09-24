@@ -44,25 +44,33 @@ class TD3(object):
         self.target_policy_network = PolicyNetwork(
             state_dim, action_dim, self.hidden_dim).to(device)
 
-        self.soft_update(self.value_network_1, self.target_value_network_1, soft_tau=self.soft_tau)
-        self.soft_update(self.value_network_2, self.target_value_network_2, soft_tau=self.soft_tau)
-        self.soft_update(self.policy_network, self.target_policy_network, soft_tau=self.soft_tau)
+        self.soft_update(self.value_network_1,
+                         self.target_value_network_1, soft_tau=self.soft_tau)
+        self.soft_update(self.value_network_2,
+                         self.target_value_network_2, soft_tau=self.soft_tau)
+        self.soft_update(self.policy_network,
+                         self.target_policy_network, soft_tau=self.soft_tau)
 
         self.value_criterion = nn.MSELoss()
 
         self.policy_lr = params['policy_lr']
         self.value_lr = params['value_lr']
 
-        self.value_optimizer1 = optim.Adam(self.value_network_1.parameters(), lr=self.value_lr)
-        self.value_optimizer2 = optim.Adam(self.value_network_2.parameters(), lr=self.value_lr)
-        self.policy_optimizer = optim.Adam(self.policy_network.parameters(), lr=self.policy_lr)
+        self.value_optimizer1 = optim.Adam(
+            self.value_network_1.parameters(), lr=self.value_lr)
+        self.value_optimizer2 = optim.Adam(
+            self.value_network_2.parameters(), lr=self.value_lr)
+        self.policy_optimizer = optim.Adam(
+            self.policy_network.parameters(), lr=self.policy_lr)
 
     def td3_update(self, memory, step):
         if type(memory) is ReplayBuffer:
-            state, action, reward, next_state, done = memory.sample(self.batch_size)
+            state, action, reward, next_state, done = memory.sample(
+                self.batch_size)
 
         elif type(memory) is ReplayGMemory:
-            state, action, reward, next_state, mask, goal = memory.sample(self.batch_size)
+            state, action, reward, next_state, mask, goal = memory.sample(
+                self.batch_size)
             state = np.concatenate([state, goal], axis=1)
             next_state = np.concatenate([next_state, goal], axis=1)
 
@@ -98,25 +106,27 @@ class TD3(object):
         self.value_optimizer2.step()
 
         if step % self.policy_update == 0:
-            policy_loss = self.value_network_1(state, self.policy_network(state))
+            policy_loss = self.value_network_1(
+                state, self.policy_network(state))
             policy_loss = -policy_loss.mean()
 
             self.policy_optimizer.zero_grad()
             policy_loss.backward()
             self.policy_optimizer.step()
 
-            self.soft_update(self.value_network_1, self.target_value_network_1, soft_tau=self.soft_tau)
-            self.soft_update(self.value_network_2, self.target_value_network_2, soft_tau=self.soft_tau)
-            self.soft_update(self.policy_network, self.target_policy_network, soft_tau=self.soft_tau)
-        
-        return value_loss1.item(), value_loss2.item(), policy_loss.item()
+            self.soft_update(self.value_network_1,
+                             self.target_value_network_1, soft_tau=self.soft_tau)
+            self.soft_update(self.value_network_2,
+                             self.target_value_network_2, soft_tau=self.soft_tau)
+            self.soft_update(self.policy_network,
+                             self.target_policy_network, soft_tau=self.soft_tau)
 
     def soft_update(self, network, target_network, soft_tau=1e-2):
         for target_param, param in zip(target_network.parameters(), network.parameters()):
             target_param.data.copy_(
                 target_param.data * (1.0 - soft_tau) + param.data * soft_tau
             )
-    
+
     # Save model parameters
     def save_model(self, actor_model_name=None, critic_model_name=None):
         if not os.path.exists('models/'):
@@ -130,8 +140,8 @@ class TD3(object):
         critic_path_1 = abs_path + "models/td3_critic_1"
         critic_path_2 = abs_path + "models/td3_critic_2"
         if critic_model_name is not None:
-            critic_path_1 = abs_path + "models/" + critic_model_name + "_1" 
-            critic_path_2 = abs_path + "models/" + critic_model_name + "_2" 
+            critic_path_1 = abs_path + "models/" + critic_model_name + "_1"
+            critic_path_2 = abs_path + "models/" + critic_model_name + "_2"
         print('Saving models to {} and {}'.format(actor_path, critic_path_1))
         torch.save(self.policy_network.state_dict(), actor_path)
         torch.save(self.value_network_1.state_dict(), critic_path_1)
