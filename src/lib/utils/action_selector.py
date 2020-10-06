@@ -118,15 +118,18 @@ class ActionSelector:
             return ([hfo.TURN, angle], 2)
 
     def get_mid_level_action(self, action):
-        if action[0] < -0.5:
-            speed = float((action[3] + 1.0) * 3.0)
-            return ([hfo.KICK_TO, action[1], action[2], speed], 4)
-        elif action[0] < 0.0:
-            return ([hfo.MOVE_TO, action[1], action[2]], 3)
-        elif action[0] < 0.5:
-            return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
+        if self.kickable:
+            if action[0] < -0.5:
+                speed = float((action[3] + 1.0) * 3.0)
+                return ([hfo.KICK_TO, action[1], action[2], speed], 4)
+            elif action[0] < 0.0:
+                return ([hfo.MOVE_TO, action[1], action[2]], 3)
+            elif action[0] < 0.5:
+                return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
+            else:
+                return ([hfo.INTERCEPT], 1)
         else:
-            return ([hfo.INTERCEPT], 1)
+            return ([hfo.MOVE_TO, action[1], action[2]], 3)
 
     def get_dribble_action(self, action):
         return ([hfo.DRIBBLE_TO, action[0], action[1]], 3)
