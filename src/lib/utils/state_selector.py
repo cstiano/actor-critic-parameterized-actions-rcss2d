@@ -1,6 +1,7 @@
 import numpy as np
 from src.lib.utils.state_wrapper import *
 
+HFO_STATE = -1
 DEFAULT_STATE = 0
 BALL_AXIS_POSITION_SPACE = 1
 AGENT_BALL_SPACE_SPACE = 2
@@ -17,6 +18,7 @@ WITHOUT_OPPONENT_INFO_SHAPE = (9,)
 AGENT_ORIENTATION_AND_BALL_POSITION_KICKABLE_SHAPE = (6,)
 AGENT_AND_BALL_POSITION_KICKABLE_SHAPE = (5,)
 BALL_AXIS_AND_BALL_POSITION_KICKABLE_SHAPE = (5,)
+HFO_SHAPE = (9,)
 
 
 class StateSelector:
@@ -39,6 +41,8 @@ class StateSelector:
             return self.get_agent_and_ball_kickable_state(state)
         elif self.selected_state == BALL_AXIS_AND_BALL_POSITION_KICKABLE_SPACE:
             return self.get_ball_axis_and_ball_position_kickable_state(state)
+        elif self.selected_state == HFO_STATE:
+            return self.get_hfo_state(state)
         return np.array([0.0])
 
     def get_shape(self):
@@ -56,7 +60,14 @@ class StateSelector:
             return AGENT_AND_BALL_POSITION_KICKABLE_SHAPE
         elif self.selected_state == BALL_AXIS_AND_BALL_POSITION_KICKABLE_SPACE:
             return BALL_AXIS_AND_BALL_POSITION_KICKABLE_SHAPE
+        elif self.selected_state == HFO_STATE:
+            return HFO_SHAPE
         return (0,)
+
+    def get_hfo_state(self, state):
+        return np.array([state[0], state[1], state[2],
+                         state[3], state[4], state[5],
+                         state[12], state[13], state[14]])
 
     # This state delivers the positon of the agent relative to the ball
     # considering the ball as the (0,0) of the axis
@@ -75,12 +86,12 @@ class StateSelector:
 
     def get_without_opponent_info_state(self, state):
         return np.array([state[0], state[1], state[2],
-                        state[3], state[4], state[5],
-                        state[6], state[7], state[8]])
-    
+                         state[3], state[4], state[5],
+                         state[6], state[7], state[8]])
+
     def get_agent_orientation_ball_kickable_state(self, state):
         return np.array([state[0], state[1], state[2], state[3], state[4], state[5]])
-    
+
     def get_agent_and_ball_kickable_state(self, state):
         return np.array([state[0], state[1], state[3], state[4], state[5]])
 

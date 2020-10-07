@@ -141,6 +141,8 @@ class HFOEnv(hfo.HFOEnvironment):
     def get_state(self):
         if self.selected_state == 0:
             return self.strict_state(self.getState())
+        if self.selected_state == -1:
+            return self.state_selector.get_state(self.getState())
         return self.state_selector.get_state(self.strict_state(self.getState()))
 
     def reset(self):
