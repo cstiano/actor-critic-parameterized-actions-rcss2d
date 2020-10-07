@@ -20,9 +20,8 @@ class ActionSelector:
         self.kickable = None
     
     def update_if_necessary(self, state):
-        if self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
-            # Update the kickable with the current state
-            self.kickable = bool(state[5])
+        # Update the kickable with the current state
+        self.kickable = bool(state[5])
 
     def get_action(self, action):
         if self.selected_action == TEST_ACTION:
