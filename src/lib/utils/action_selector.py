@@ -9,6 +9,7 @@ ALL_LOW_ACTIONS = 4
 ALL_MID_ACTIONS = 5
 DRIBBLE_ACTION = 6
 CONDITIONAL_DASH_OR_KICK_ACTION = 7
+MID_LEVEL_AND_SHOOT_ACTION = 8
 
 MAX_DASH = 100
 
@@ -42,6 +43,8 @@ class ActionSelector:
             return self.get_dribble_action(action)
         elif self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
             return self.get_conditional_dash_or_kick(action)
+        elif self.selected_action == MID_LEVEL_AND_SHOOT_ACTION:
+            return self.get_mid_level_and_shoot_action(action)
         return ([], 0)
 
     def get_action_space_info(self):
@@ -65,6 +68,9 @@ class ActionSelector:
             return self.get_dict_info([hfo.DRIBBLE_TO], [0], 2)
         elif self.selected_action == CONDITIONAL_DASH_OR_KICK_ACTION:
             return self.get_dict_info([hfo.DASH, hfo.KICK], [0, 0], 3)
+        elif self.selected_action == MID_LEVEL_AND_SHOOT_ACTION:
+            return self.get_dict_info([hfo.KICK_TO, hfo.MOVE_TO, hfo.DRIBBLE_TO, hfo.SHOOT],
+                                      [0, 0, 0, 0], 4)
         return ([], [], 0)
 
     def get_dict_info(self, actions, env_rewards_config_action, action_dim):
@@ -127,6 +133,20 @@ class ActionSelector:
                 return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
             else:
                 return ([hfo.INTERCEPT], 1)
+        else:
+            return ([hfo.MOVE_TO, action[1], action[2]], 3)
+    
+    def get_mid_level_and_shoot_action(self, action):
+        if self.kickable:
+            if action[0] < -0.5:
+                speed = float((action[3] + 1.0) * 3.0)
+                return ([hfo.KICK_TO, action[1], action[2], speed], 4)
+            elif action[0] < 0.0:
+                return ([hfo.MOVE_TO, action[1], action[2]], 3)
+            elif action[0] < 0.5:
+                return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
+            else:
+                return ([hfo.SHOOT], 1)
         else:
             return ([hfo.MOVE_TO, action[1], action[2]], 3)
 
