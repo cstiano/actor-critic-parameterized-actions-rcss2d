@@ -10,6 +10,7 @@ BALL_POTENCIAL_DIFF_REWARD = 4
 AGENT_AND_BALL_POTENCIAL_REWARD = 5
 AGENT_POTENCIAL_TO_BALL_REWARD = 6
 PAPER_SKILL_GO_TO_BALL_REWARD = 7
+AGENT_AND_BALL_POTENCIAL_WITH_OPPONENT_REWARD = 8
 
 MAX_DISTANCE = 50.0
 MIN_DISTANCE_TO_BALL = 2.0
@@ -50,6 +51,8 @@ class RewardSelector:
             return self.get_reward_agent_potencial_to_ball(act, state_wrapper, done, status)
         elif self.selected_reward == PAPER_SKILL_GO_TO_BALL_REWARD:
             return self.get_reward_paper_skill(act, state_wrapper, done, status)
+        elif self.selected_reward == AGENT_AND_BALL_POTENCIAL_WITH_OPPONENT_REWARD:
+            return self.get_reward_agent_and_ball_potencial_with_opponent(act, state_wrapper, done, status)
         return 0.0
 
     def get_reward_go_to_ball(self, act, state_wrapper, done, status):
@@ -133,6 +136,23 @@ class RewardSelector:
 
         if status == hfo.GOAL:
             return GOAL_FACTOR
+
+        return (AGENT_POTENCIAL_FACTOR * agent_potencial_difference_to_ball) + (POTENCIAL_BALL_FACTOR * potencial_difference)
+    
+    def get_reward_agent_and_ball_potencial_with_opponent(self, act, state_wrapper, done, status):
+        ball_position = state_wrapper.get_ball_position()
+        ball_distance_to_goal = state_wrapper.get_ball_distance_to_goal()
+        distance_to_ball = state_wrapper.get_distance_to_ball()
+
+        agent_potencial_difference_to_ball = self.last_distance_to_ball - distance_to_ball
+        self.last_distance_to_ball = distance_to_ball
+        potencial_difference = self.last_ball_distance_to_goal - ball_distance_to_goal
+        self.last_ball_distance_to_goal = ball_distance_to_goal
+
+        if status == hfo.GOAL:
+            return GOAL_FACTOR
+        if status == hfo.CAPTURED_BY_DEFENSE:
+            return ((-1) * GOAL_FACTOR)
 
         return (AGENT_POTENCIAL_FACTOR * agent_potencial_difference_to_ball) + (POTENCIAL_BALL_FACTOR * potencial_difference)
 
