@@ -10,6 +10,7 @@ ALL_MID_ACTIONS = 5
 DRIBBLE_ACTION = 6
 CONDITIONAL_DASH_OR_KICK_ACTION = 7
 MID_LEVEL_AND_SHOOT_ACTION = 8
+DRIBBLE_AND_SHOOT_ACTION = 9
 
 MAX_DASH = 100
 
@@ -45,6 +46,8 @@ class ActionSelector:
             return self.get_conditional_dash_or_kick(action)
         elif self.selected_action == MID_LEVEL_AND_SHOOT_ACTION:
             return self.get_mid_level_and_shoot_action(action)
+        elif self.selected_action == DRIBBLE_AND_SHOOT_ACTION:
+            return self.get_dribble_and_shoot_action(action)
         return ([], 0)
 
     def get_action_space_info(self):
@@ -71,6 +74,8 @@ class ActionSelector:
         elif self.selected_action == MID_LEVEL_AND_SHOOT_ACTION:
             return self.get_dict_info([hfo.KICK_TO, hfo.DRIBBLE_TO, hfo.SHOOT],
                                       [0, 0, 0], 4)
+        elif self.selected_action == DRIBBLE_AND_SHOOT_ACTION:
+            return self.get_dict_info([hfo.DRIBBLE_TO, hfo.SHOOT], [0, 0], 3)
         return ([], [], 0)
 
     def get_dict_info(self, actions, env_rewards_config_action, action_dim):
@@ -164,3 +169,12 @@ class ActionSelector:
             angle = float(action[1] * 180.0)
             power = float(action[2] * 100)
             return ([hfo.DASH, power, angle], 3)
+    
+    def get_dribble_and_shoot_action(self, action):
+        if self.kickable:
+            if action[0] < 0.0:
+                return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
+            else:
+                return ([hfo.SHOOT], 1)
+        else:
+            return ([hfo.DRIBBLE_TO, action[1], action[2]], 3)
