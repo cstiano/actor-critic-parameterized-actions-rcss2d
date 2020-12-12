@@ -11,10 +11,10 @@ EXPERIMENT = 5
 SMOOTHING_FACTOR = 7
 
 if EXPERIMENT == 1:
-    sac_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-23_21-19-16_SAC_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
-    td3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-23_23-02-55_TD3_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
-    ddpg_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-23_22-19-41_DDPG_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
-    # ddpg_lr3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-24_00-12-30_DDPG_GO_TO_BALL_A1_R1_LR3-tag-Rewards_epi_reward.csv")
+    sac_df = pd.read_csv("/results/csv/run_2020-09-23_21-19-16_SAC_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
+    td3_df = pd.read_csv("/results/csv/run_2020-09-23_23-02-55_TD3_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
+    ddpg_df = pd.read_csv("/results/csv/run_2020-09-23_22-19-41_DDPG_GO_TO_BALL_A1_R1-tag-Rewards_epi_reward.csv")
+    # ddpg_lr3_df = pd.read_csv("/results/csv/run_2020-09-24_00-12-30_DDPG_GO_TO_BALL_A1_R1_LR3-tag-Rewards_epi_reward.csv")
     del sac_df["Wall time"]
     del td3_df["Wall time"]
     del ddpg_df["Wall time"]
@@ -43,9 +43,9 @@ if EXPERIMENT == 1:
     plt.show()
 
 elif EXPERIMENT == 2:
-    sac_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-23_21-46-23_SAC_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
-    td3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-24_22-01-29_TD3_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
-    ddpg_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-23_00-50-41_DDPG_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
+    sac_df = pd.read_csv("/results/csv/run_2020-09-23_21-46-23_SAC_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
+    td3_df = pd.read_csv("/results/csv/run_2020-09-24_22-01-29_TD3_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
+    ddpg_df = pd.read_csv("/results/csv/run_2020-10-23_00-50-41_DDPG_GO_TO_BALL_WITH_POWER_A2_R1-tag-Rewards_epi_reward.csv")
     del sac_df["Wall time"]
     del td3_df["Wall time"]
     del ddpg_df["Wall time"]
@@ -74,9 +74,9 @@ elif EXPERIMENT == 2:
     plt.show()
 
 elif EXPERIMENT == 3:
-    sac_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-25_21-01-22_SAC_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
-    td3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-25_20-34-06_TD3_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
-    ddpg_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-23_01-02-12_DDPG_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
+    sac_df = pd.read_csv("/results/csv/run_2020-09-25_21-01-22_SAC_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
+    td3_df = pd.read_csv("/results/csv/run_2020-09-25_20-34-06_TD3_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
+    ddpg_df = pd.read_csv("/results/csv/run_2020-10-23_01-02-12_DDPG_BALL_TO_GOAL_A7_R5_S3-tag-Rewards_epi_reward.csv")
     del sac_df["Wall time"]
     del td3_df["Wall time"]
     del ddpg_df["Wall time"]
@@ -106,9 +106,9 @@ elif EXPERIMENT == 3:
     plt.show()
 
 elif EXPERIMENT == 4:
-    sac_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-27_09-40-34_SAC_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
-    td3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-09-27_20-07-41_TD3_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
-    ddpg_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-23_21-28-23_DDPG_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
+    sac_df = pd.read_csv("/results/csv/run_2020-09-27_09-40-34_SAC_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
+    td3_df = pd.read_csv("/results/csv/run_2020-09-27_20-07-41_TD3_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
+    ddpg_df = pd.read_csv("/results/csv/run_2020-10-23_21-28-23_DDPG_BALL_TO_GOAL_A7_R3_S3-tag-Rewards_epi_reward.csv")
     del sac_df["Wall time"]
     del td3_df["Wall time"]
     del ddpg_df["Wall time"]
@@ -138,9 +138,9 @@ elif EXPERIMENT == 4:
     plt.show()
 
 elif EXPERIMENT == 5:
-    sac_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-07_20-55-27_SAC_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
-    td3_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-09_22-47-09_TD3_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
-    ddpg_df = pd.read_csv("/Users/cristianooliveira/personal-development/tcc/tg-repo/results/csv/run_2020-10-10_13-36-45_DDPG_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
+    sac_df = pd.read_csv("/results/csv/run_2020-10-07_20-55-27_SAC_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
+    td3_df = pd.read_csv("/results/csv/run_2020-10-09_22-47-09_TD3_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
+    ddpg_df = pd.read_csv("/results/csv/run_2020-10-10_13-36-45_DDPG_BALL_TO_GOAL_BIN_SHOOT_OPP-tag-Rewards_epi_reward.csv")
     del sac_df["Wall time"]
     del td3_df["Wall time"]
     del ddpg_df["Wall time"]
